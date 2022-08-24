@@ -1,3 +1,5 @@
+Após preparar o ambiente Clojure ( https://clojure.org/guides/getting_started) digitar no terminal `clj` para trabalhar com código.
+
 Definindo uma variável global:
 (def total-desconto 15)
 
@@ -9,6 +11,9 @@ Adiciona elemento ao vetor:
 
 Conta quantos elementos tem um vetor:
 (count estoque)
+
+Classe do objeto:
+(class 90.0)
 
 Adiciona elemento ao vetor e atribui valor:
 (def estoque (conj estoque "Cadeira"))
@@ -39,4 +44,32 @@ A nomenclatura abaixo remete a uma função pura, é um substantivo
 Redefine a função:
 (defn valor-descontado
     [valor-bruto]
-    (* valor-bruto (- 1 0.10)))
+    (def desconto 0.10)
+    (* valor-bruto (- 1 desconto)))
+
+Redefine usando "let", define um vetor dentro do próprio escopo (dentro dos parêntesis), símbolo/variável local.
+Let retorna o resultado da última operação inserida.
+(defn valor-descontado
+    "Retorna o valor com desconto de 10%."
+    [valor-bruto]
+    (let [desconto 0.10]
+        (* valor-bruto (- 1 desconto))))
+
+Chamando a função e passando o valor 1000 como "valor-bruto".
+(valor-descontado 1000)
+
+Inserindo a [forma especial](https://clojure.org/reference/special_forms#if.) if:
+(defn valor-descontado
+    "Retorna o valor com desconto de 10% se o valor brurto for maior que 100."
+    [valor-bruto]
+    (if (> valor-bruto 100)
+        (let [taxa-de-desconto (/ 10 100)
+              desconto         (* valor-bruto taxa-de-desconto)]
+          (println "Calculando desconto de " desconto)
+          (- valor-bruto desconto))
+        valor-bruto))
+
+(valor-descontado 10)
+(valor-descontado 1000)
+
+Obs.: "nil" ou nulo é considerado false dentro do if.
