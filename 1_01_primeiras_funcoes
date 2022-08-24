@@ -1,0 +1,42 @@
+Definindo uma variável global:
+(def total-desconto 15)
+
+Definindo um vetor:
+(def esetoque ["Mochila", "Camiseta"])
+
+Adiciona elemento ao vetor:
+ (conj estoque "Cadeira")
+
+Conta quantos elementos tem um vetor:
+(count estoque)
+
+Adiciona elemento ao vetor e atribui valor:
+(def estoque (conj estoque "Cadeira"))
+
+Cria função sem parâmetro:
+(defn imprime-mensagem []
+    (println "--------------------")
+    (println "Bem vindo(a) ao estoque!"))
+
+(imprime-mensagem)
+
+Cria funçlão com parâmetro:
+Imperativo se relaciona com operações que remetem a efeito colateral, verbo
+(defn aplica-desconto [valor-bruto]
+    (* valor-bruto 0.9))
+
+(aplica-desconto 1000)
+
+Adiciona descrição à função:
+A nomenclatura abaixo remete a uma função pura, é um substantivo
+(defn valor-descontado 
+    "Retorna o valor descontado que é 90% do valor bruto"
+    [valor-bruto]
+    (* valor-bruto 0.9))
+
+(valor-descontado 1000)
+
+Redefine a função:
+(defn valor-descontado
+    [valor-bruto]
+    (* valor-bruto (- 1 0.10)))
