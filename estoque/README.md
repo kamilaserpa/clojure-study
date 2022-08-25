@@ -1,6 +1,6 @@
 # Estoque
 
-Um projeto Clojure para estudo da liguagem.
+Um projeto Clojure para estudo da linguagem.
 
 ## Tópicos
 
@@ -13,6 +13,7 @@ O comando utilizado para utilizar um namespace específico é `(use 'estoque.aul
 
 ## Intellij IDE
 Adicionar o plugin "Cursive".
+No menu "Code" encontra-se a opção "Reformat code".
 
 Alguns atalhos:
  - Cmd + Shift + L carrega novo arquivo no REPL.
