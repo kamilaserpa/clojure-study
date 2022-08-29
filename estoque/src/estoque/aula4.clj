@@ -5,9 +5,11 @@
 (println (precos 0))
 (println (get precos 0))
 
-;(println (precos 17))                                       ; IndexOutOfBoundsException
+;(println (precos 17))                                      ; IndexOutOfBoundsException
 (println (get precos 17))                                   ; retorna null
 
+
+; Definindo valor padrão de retorno do get
 (println "Valor padrão 0 caso o indice não exista" (get precos 17 0))
 (println "Valor padrão 0, mas índice existe" (get precos 2 0))
 
@@ -22,11 +24,13 @@
 (println (update precos 0 inc))                             ; ao índice 0 da colação 'precos' aplica a função incrementa 1
 (println (update precos 1 dec))                             ; ao índice 1 da coleção aplica a função decrementa 1
 
+
 (defn soma-1
   [valor]
   (println "Estou somando 1 em" valor)
   (+ valor 1))
 
+; Aplica fn 'soma-1' ao índice 0 do vetor precos e retorna um vetor com o valor alterado
 (println (update precos 0 soma-1))
 
 
@@ -65,3 +69,25 @@
 
 ; Chamando a função 'valor-descontado' para cada item do retorno do filtro
 (println (map valor-descontado (filter aplica-desconto? precos)))
+
+; Somando total dos preços
+(println (reduce + precos))
+
+(defn minha-soma
+  [valor-1 valor-2]
+  (println "somando" valor-1 valor-2)
+  (+ valor-1 valor-2))
+
+(println "> minha-soma" (reduce minha-soma precos))
+(println "> minha-soma" (reduce minha-soma (range 10)))
+(println "> minha-soma" (reduce minha-soma [15]))
+
+(println "> minha-soma iniciando já com 10" (reduce minha-soma 10 precos))
+(println "> minha-soma" (reduce minha-soma 5 (range 10)))
+(println "> minha-soma" (reduce minha-soma 0 [15]))
+(println "> minha-soma de 0 com itens de array vazio" (reduce minha-soma 0 []))
+
+; Para aplicar o reduce (sem um valor inicial) o array deve conter elementos
+;(println "> minha-soma de array vazio 'ArityException'" (reduce minha-soma []))
+
+

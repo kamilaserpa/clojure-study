@@ -17,6 +17,8 @@ Inclusive você pode passá-las como argumento para outras funções, ou recebê
 Funções que recebem ou retornam funções são chamadas de "higher order functions".
 Utiliza-se `%` para fazer uma função lambda.
 
+Na documentação é possível acessar a descrição de diversas funções, [https://clojuredocs.org/clojure.core](https://clojuredocs.org/clojure.core).
+
 ## Intellij IDE
 Adicionar o plugin "Cursive".
 No menu "Code" encontra-se a opção "Reformat code".
