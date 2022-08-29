@@ -28,6 +28,7 @@ Alguns atalhos:
  - Cmd + Shift + P, com o cursor localizado em um trecho de código, esse atalho executa o escopo em questão
  - Cmd + Shift + K adiciona para dentro do escopo algo à direita dos parêntesis.
  - Cmd + Shift + J remove do escopo algo para a direita dos parêntesis.
+ - Cmd + Alt + L identação
 
 
 ## License

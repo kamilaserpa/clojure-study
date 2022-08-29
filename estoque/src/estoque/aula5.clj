@@ -30,3 +30,42 @@
 
 ; Removendo/Desassociando chave do vetor
 (println (dissoc estoque :mochila))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(def pedido {
+             :mochila  {:quantidade 2, :preco 80}
+             :camiseta {:quantidade 3, :preco 40}})
+
+(println "\n\n\n")
+(println pedido)
+
+(def pedido (assoc pedido :chaveiro {:quantidade 1, :preco 10}))
+(println pedido)
+
+; Utilizando o mapa como função, capturando o item de chave 'mochila'
+(println (pedido :mochila))                                 ; mais raro pois se não houver valor hpa exception
+(println (get pedido :mochila))
+(println (get pedido :cadeira))
+(println (get pedido :cadeira {}))
+(println (:mochila pedido))
+(println (:mochila pedido {}))                              ; MAIS COMUM. Caso não haja dados retorna um mapa vazio por padrão
+
+(println (:quantidade (:mochila pedido)))                   ; código mais difícil de ler
+
+; UPDATE-IN
+; Atualiza um valor dentro do vetor (pedido/mochila/quantidade
+(println (update-in pedido [:mochila :quantidade] inc))
+
+; THREADING FIRST
+; encadeia a chamada da função pedido 'pega a mochila', agora 'pega a quantidade (da mochila)'
+; Melhor legibilidade
+(println (-> pedido
+             :mochila
+             :quantidade))
+
+(-> pedido
+    :mochila
+    :quantidade
+    println)                                                ; mesmo resultado da anterior
