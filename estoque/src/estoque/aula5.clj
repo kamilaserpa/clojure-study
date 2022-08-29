@@ -61,6 +61,7 @@
 ; THREADING FIRST
 ; encadeia a chamada da função pedido 'pega a mochila', agora 'pega a quantidade (da mochila)'
 ; Melhor legibilidade
+; First pois passa a coleção primeiro, função depois
 (println (-> pedido
              :mochila
              :quantidade))
