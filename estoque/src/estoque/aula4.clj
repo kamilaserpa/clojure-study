@@ -36,3 +36,32 @@
   (+ valor 3))
 
 (println (update precos 0 soma-3))
+
+; CÓDIGO DA AULA ANTERIOR
+
+(defn aplica-desconto?
+  [valor-bruto]
+  (println "Chamando a função 'aplica-desconto?'")
+  (> valor-bruto 100))
+
+(defn valor-descontado
+  "Retorna o valor com desconto de 10% se o valor bruto for maior que 100."
+  [valor-bruto]
+  (if (aplica-desconto? valor-bruto)
+    (let [taxa-de-desconto (/ 10 100)
+          desconto (* valor-bruto taxa-de-desconto)]
+      (- valor-bruto desconto))
+    valor-bruto))
+
+(println "Preços:" precos)
+
+; Apliuca a fn "valor-descontado" para cada índice do vator preço
+(println "map" (map valor-descontado precos))
+
+(println "range" (range 10))
+(println "filter números pares" (filter even? (range 10)))
+
+(println "Filtra precos em que se aplica desconto" (filter aplica-desconto? precos))
+
+; Chamando a função 'valor-descontado' para cada item do retorno do filtro
+(println (map valor-descontado (filter aplica-desconto? precos)))

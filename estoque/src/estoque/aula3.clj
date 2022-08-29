@@ -26,7 +26,7 @@
 
 
 (defn valor-descontado
-  "Retorna o valor com desconto de 10% se o valor brurto for maior que 100."
+  "Retorna o valor com desconto de 10% se o valor bruto for maior que 100."
   [valor-bruto]
   (if (aplica-desconto? valor-bruto)
     (let [taxa-de-desconto (/ 10 100)
