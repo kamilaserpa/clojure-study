@@ -11,15 +11,21 @@ O **Namespace** é especificado pela macro `ns` na parte superior do arquivo e d
 É um contexto  e um container para vars, lower-case e usa hífen(-) por padrão para separar palavras.
 O comando utilizado para utilizar um namespace específico é `(use 'estoque.aula2)`.
 
+**Funções** são "coisas", é a maneira informal de dizer que aqui em Clojure funções são tratadas como algo muito importante, tão importantes quanto dados.
+Isto é, você pode trabalhar com símbolos que referenciam funções. Funções são "first class citizens".
+Inclusive você pode passá-las como argumento para outras funções, ou recebê-las como retorno de funções.
+Funções que recebem ou retornam funções são chamadas de "higher order functions".
+Utiliza-se `%` para fazer uma função lambda.
+
 ## Intellij IDE
 Adicionar o plugin "Cursive".
 No menu "Code" encontra-se a opção "Reformat code".
 
 Alguns atalhos:
- - Cmd + Shift + L carrega novo arquivo no REPL.
+ - Cmd + Shift + L carrega novo arquivo no REPL, reload.
+ - Cmd + Shift + P, com o cursor localizado em um trecho de código, esse atalho executa o escopo em questão
  - Cmd + Shift + K adiciona para dentro do escopo algo à direita dos parêntesis.
  - Cmd + Shift + J remove do escopo algo para a direita dos parêntesis.
- - Cmd + Shift + P, com o cursos localizado em um trecho de código, esse atalho executa o escopo em questão
 
 
 ## License
