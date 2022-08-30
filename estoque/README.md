@@ -19,6 +19,10 @@ Utiliza-se `%` para fazer uma função lambda.
 
 Na documentação é possível acessar a descrição de diversas funções, [https://clojuredocs.org/clojure.core](https://clojuredocs.org/clojure.core).
 
+[**Thread**](https://clojure.org/guides/threading_macros)
+ - Por convenção, as funções principais que operam em sequências esperam a sequência como seu último argumento. Da mesma forma, pipelines contendo map, filter, remove, reduce, into, etc geralmente chamam a macro ´->>` "thread last".
+ - As funções principais que operam em estruturas de dados, por outro lado, esperam o valor em que trabalham como seu primeiro argumento. Estes incluem assoc, update, dissoce getsuas -invariantes. Os pipelines que transformam mapas usando essas funções geralmente exigem a macro `->` "thread first".
+
 ## Intellij IDE
 Adicionar o plugin "Cursive".
 No menu "Code" encontra-se a opção "Reformat code".
