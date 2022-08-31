@@ -70,8 +70,8 @@
 (def pedido {
              :mochila  {:quantidade 2, :preco 80}
              :camiseta {:quantidade 3, :preco 40}
-             :chaveiro {:quantidade 1}
-             })
+             :chaveiro {:quantidade 1}})
+
 
 (defn gratuito?
   [[chave item]]

@@ -1,4 +1,4 @@
-# Estoque
+# Clojure: programação funcional (curso 1)
 
 Um projeto Clojure para estudo da linguagem em acompanhamento à Plataforma Alura.
 
@@ -11,7 +11,8 @@ O **Namespace** é especificado pela macro `ns` na parte superior do arquivo e d
 É um contexto  e um container para vars, lower-case e usa hífen(-) por padrão para separar palavras.
 O comando utilizado para utilizar um namespace específico é `(use 'estoque.aula2)`.
 
-**Characters Clojure**
+### Characters Clojure
+
  - Vírgula `,` é tratado como espaço em branco.
  - `_` usado como argumento de função indica que este arugmento não será utilizado.
  - [Listas](https://clojure.org/reference/data_structures#Lists) são coleções heterogêneas sequenciais, implementadas como uma lista encadeada.
