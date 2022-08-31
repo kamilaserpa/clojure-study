@@ -38,3 +38,34 @@
 (meu-mapa println ["daniela" false "cristiano" "lucia" "ana" "***"])
 (meu-mapa println [])
 (meu-mapa println nil)
+
+; Estouro da pilha de memória em execução por recursividade (StackOverflowError)
+; (meu-mapa println (range 10000))
+
+
+
+(println "\n\n** MEU MAPA COM INDICAÇÃO DE LOOP PARA COMPILADOR **")
+; TAIL RECURSION
+(defn meu-mapa
+  [funcao sequencia]
+  (let [primeiro (first sequencia)]
+    (if (not (nil? primeiro))
+      (do
+        (funcao primeiro)
+        (recur funcao (rest sequencia))))))
+
+(meu-mapa println (range 10000))                            ; Execução sem estouro da pilha de execução
+
+;;; Outro exemplo de funçaõ recursiva
+(def factorial
+  (fn [n]
+    (loop [contador n acumulador 1]
+      (println "contador:" contador "| acumulador:" acumulador "| n:" n)
+      (if (zero? contador)
+        acumulador
+        (recur (dec contador) (* acumulador contador))))))
+; in loop cnt will take the value (dec cnt)
+; and acc will take the value (* acc cnt)
+
+(println (factorial 4))
+

@@ -45,3 +45,22 @@ A macro [`seq`](https://clojuredocs.org/clojure.core/seq) retorna uma sequência
     (seq [])    ;;=> nil
     (seq "")    ;;=> nil
 ```
+
+### Recur
+
+A macro [`recur`](https://clojuredocs.org/clojure.core/recur) avalia as expressões em ordem, então, em paralelo, 
+religa o retorno do ponto de recursão para os valores de entrada da expressão.
+```clojure
+    ; Exemplo para cáluclo de fatorial: n! = n . (n – 1). (n – 2). (n – 3) ... 2,1
+    (def factorial
+      (fn [n]
+        (loop [contador n acumulador 1]
+          (println "contador:" contador "| acumulador:" acumulador "| n:" n)
+          (if (zero? contador)
+            acumulador
+            (recur (dec contador) (* acumulador contador))))))
+    ; no loop contador tomará o valor (dec contador) // dec retorna um número a menos
+    ; e o acumulador tomará o valor da multiplicação (* acumulador contador)
+    
+    (println (factorial 4))
+```
