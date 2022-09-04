@@ -56,7 +56,7 @@
 
 (meu-mapa println (range 10000))                            ; Execução sem estouro da pilha de execução
 
-;;; Outro exemplo de funçaõ recursiva
+;;; Outro exemplo de função recursiva
 (def factorial
   (fn [n]
     (loop [contador n acumulador 1]

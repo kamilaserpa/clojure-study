@@ -49,7 +49,8 @@ A macro [`seq`](https://clojuredocs.org/clojure.core/seq) retorna uma sequência
 ### Recur
 
 A macro [`recur`](https://clojuredocs.org/clojure.core/recur) avalia as expressões em ordem, então, em paralelo, 
-religa o retorno do ponto de recursão para os valores de entrada da expressão.
+religa o retorno do ponto de recursão para os valores de entrada da expressão. 
+Indica para o clojure que estamos fazendo uma recursão e só pode aparecer como retorno da função (cauda).
 ```clojure
     ; Exemplo para cáluclo de fatorial: n! = n . (n – 1). (n – 2). (n – 3) ... 2,1
     (def factorial
@@ -63,4 +64,20 @@ religa o retorno do ponto de recursão para os valores de entrada da expressão.
     ; e o acumulador tomará o valor da multiplicação (* acumulador contador)
     
     (println (factorial 4))
+```
+
+Na recursão deve ser explicitado o critério de parada da repetição.
+
+### Multi-aridade
+
+A aridade é simplesmente o número de argumentos que uma função pode receber.
+Uma maneira de definir [funções multiaridade](https://theburningmonk.com/2013/09/clojure-multi-arity-and-variadic-functions/)
+é usar a macro defn, por exemplo:
+```clojure
+    (defn greet
+      ([] (greet "you"))                ;; implementação com aridade 0
+      ([name] (print "Hello" name)))    ;; implementação com aridade 1
+
+    (greet)                             ;; => Hello you
+    (greet "World")                     ;; => Hello World
 ```
