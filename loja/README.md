@@ -105,3 +105,10 @@ Como comentamos no caso do loop, tradicionalmente você verá outras formas de e
                  x2 digits]
              (* x1 x2)))
 ```
+
+### Importação de classe
+Importação de classe `loja.db` em `loja.aula3`, utilizando `:as` para abreviação.
+```clojure
+    (ns loja.aula3
+      (:require [loja.db :as l.db]))
+````
