@@ -59,7 +59,8 @@
 ;;; Outro exemplo de função recursiva
 (def factorial
   (fn [n]
-    (loop [contador n acumulador 1]
+    (loop [contador n
+           acumulador 1]
       (println "contador:" contador "| acumulador:" acumulador "| n:" n)
       (if (zero? contador)
         acumulador

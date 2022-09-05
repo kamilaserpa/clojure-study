@@ -55,7 +55,8 @@ Indica para o clojure que estamos fazendo uma recursão e só pode aparecer como
     ; Exemplo para cáluclo de fatorial: n! = n . (n – 1). (n – 2). (n – 3) ... 2,1
     (def factorial
       (fn [n]
-        (loop [contador n acumulador 1]
+        (loop [contador n               ; contador inicializado com valor 'n'
+               acumulador 1]            ; acumulador inicializado com valor 1
           (println "contador:" contador "| acumulador:" acumulador "| n:" n)
           (if (zero? contador)
             acumulador
