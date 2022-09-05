@@ -82,3 +82,26 @@ Uma maneira de definir [funções multiaridade](https://theburningmonk.com/2013/
     (greet)                             ;; => Hello you
     (greet "World")                     ;; => Hello World
 ```
+### Loop
+
+No [`loop`](https://clojuredocs.org/clojure.core/loop) a recursão é realizada em trecho de código dentro da função e não de toda a função em si.
+Este caso geralmente ocorre com trecho de código antes do loop.
+Nesse caso provavelmente há um controle de fluxo que deveria ter sido isolado em outro trecho de código.
+
+### For
+Clojure possui também um [`for`](https://clojuredocs.org/clojure.core/for) que recebe uma sequência de expressões de inicialização e o corpo a ser executado.
+Ele funciona de forma similar ao loop, iterando pelos elementos da sequência, mas permitindo já loopar e definir novos símbolos com :when, :while e :let.
+Como comentamos no caso do loop, tradicionalmente você verá outras formas de executar um mesmo bloco ao invés de loop e for.
+
+```clojure
+    (println "For imprimirá os resultados:")
+    (println " 1 * 1 = 1 | 1 * 2 = 2 | 1 * 3 = 3")
+    (println " 2 * 1 = 2 | 2 * 2 = 4 | 2 * 3 = 6")
+    (println " 3 * 1 = 3 | 3 * 2 = 6 | 3 * 3 = 9")
+
+    (def digits [1 2 3])
+
+  (println (for [x1 digits
+                 x2 digits]
+             (* x1 x2)))
+```

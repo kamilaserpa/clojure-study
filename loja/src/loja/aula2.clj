@@ -61,7 +61,7 @@
 ; enquanto tem elemento soma 1 no total-ate-agora
 ; envia o next para redefinir os elementos restantes
 
-; A recursão é realizada em trecho de código dentro da função e não recursão da função em si.
+; A recursão é realizada em trecho de código dentro da função e não de toda a função em si.
 ; Este caso geralmente ocorre com trecho de código antes do loop.
 ; Nesse caso provavelmente a função está mais complexa do que deveria e pode ser dividida em duas
 
@@ -78,3 +78,15 @@
 (println "->" (conta ["daniela" "guilherme" "carlos" "paulo" "lucia" "ana"]))
 (println "->" (conta []))
 (println "->" (conta [1 2 3]))
+;;;;;
+
+(println "For imprimirá os resultados:")
+(println " 1 * 1 = 1 | 1 * 2 = 2 | 1 * 3 = 3")
+(println " 2 * 1 = 2 | 2 * 2 = 4 | 2 * 3 = 6")
+(println " 3 * 1 = 3 | 3 * 2 = 6 | 3 * 3 = 9")
+
+(def digits [1 2 3])
+
+(println (for [x1 digits
+               x2 digits]
+           (* x1 x2)))
