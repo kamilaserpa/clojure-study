@@ -32,3 +32,39 @@
 (println (take 2 (range 10000000000000000000)))
 ; A sequência não é gerada por inteiro, de forma "gulosa" (eager), apenas quando necessário
 
+(println "----------------------------")
+
+(defn filtro1 [x]
+  (println "filtro1" x)
+  x)
+
+(defn filtro2 [x]
+  (println "filtro2" x)
+  x)
+
+(println (map filtro2 (map filtro1 (range 10))))
+
+(println "----------------------------")
+(println "Criando números da sequência por pedaços 'chunks', caso a sequência seja 'chunked'")
+(->> (range 50)
+     (map filtro1)
+     (map filtro2)
+     println)
+
+(println "Forçando que a sequência seja completamente criada, de forma Eager, not chunk")
+(->> (range 50)
+     (mapv filtro1)
+     (mapv filtro2)
+     println)
+
+(println "No vetor também há partes LAZY ('chunkzadas')")
+(->> [0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9]
+     (map filtro1)
+     (map filtro2)
+     println)
+
+(println "Lista ligada foi 100% LAZY nesse cenário")
+(->> '(0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 1 2 3 4 5 6 7 8 9)
+     (map filtro1)
+     (map filtro2)
+     println)
