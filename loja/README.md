@@ -112,3 +112,31 @@ Importação de classe `loja.db` em `loja.aula3`, utilizando `:as` para abrevia�
     (ns loja.aula3
       (:require [loja.db :as l.db]))
 ````
+
+### NTH
+
+Retorna o valor no índice. Obtém retornos nulos se o índice estiver fora limites, [`nth`](https://clojuredocs.org/clojure.core/nth) lança uma exceção, a menos que não encontrado seja fornecido.
+`NTH`(enésimo) também funciona para strings, arrays Java, regex Matchers e Lists e, em tempo O(n), para sequências.
+```clojure
+  ; (nth coll index)(nth coll index not-found)
+  ; Note that nth uses zero-based indexing, so that
+  ;   (first my-seq) <=> (nth my-seq 0)
+  (def my-seq ["a" "b" "c" "d"])
+  (nth my-seq 0)               ; => "a"
+  (nth [] 0)                   ; => IndexOutOfBoundsException ...
+  (nth [] 0 "nothing found")   ; => "nothing found"
+```
+
+### Take
+Retorna uma sequência lenta dos primeiros n itens em coll, ou todos os itens se há menos de n.
+Retorna um [transdutor](https://clojure.org/reference/transducers) com estado quando nenhuma coleta é fornecida.
+
+```clojure
+    ; (take n)(take n coll)
+    (take 3 '(1 2 3 4 5 6))     ;;=> (1 2 3)
+    (take 3 [1 2 3 4 5 6])      ;;=> (1 2 3)
+    ;; returns all items if there are fewer than n
+    (take 3 [1 2])              ;;=> (1 2)
+    (take 1 [])                 ;;=> ()
+    (take 1 nil)                ;;=> ()
+```
