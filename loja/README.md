@@ -140,3 +140,15 @@ Retorna um [transdutor](https://clojure.org/reference/transducers) com estado qu
     (take 1 [])                 ;;=> ()
     (take 1 nil)                ;;=> ()
 ```
+
+### Some
+Retorna o primeiro valor `true` de uma função (pred x) para qualquer x em col, senão retorna `nil`.
+Um idioma comum do [`some`](https://clojuredocs.org/clojure.core/some) é usar um conjunto como pred.
+por exemplo isso retornará :fred se :fred estiver na sequência, caso contrário nil: (algum #{:fred} col)
+
+```clojure
+    ;; 2 é par, então `some` para, 3 e 4 nunca serão testados
+    (some even? '(1 2 3 4))      ;;=> true
+    ;; they are all odd, so not true, i.e. nil
+    (some even? '(1 3 5 7))      ;;=> nil
+```

@@ -39,3 +39,11 @@
   (println "> top-2:" (top-2 resumo)))                      ; retorna os dois primeiros elementos
 
 (println "-----------------------")
+
+
+(let [pedidos (l.db/todos-pedidos)
+      resumo (resumo-por-usuario-ordenado-por-preco pedidos)]
+  (println "Quais gastaram > 500 R$ (filter)?" (filter #(> (:preco-total %) 500) resumo)) ; funcao anonima. Captura atributo tributo :preco-total do argumento passado (%)
+  (println "Alguém gastou > 500 R$ (filter)?" (not (empty? (filter #(> (:preco-total %) 500) resumo))))
+  (println "Alguém gastou > 500 R$ (some)?" (some #(> (:preco-total %) 500) resumo)) ; retorna true ou nil
+  (println "Alguém gastou > 500 R$ (some)?" (some #(> (:preco-total %) 50000) resumo)))
