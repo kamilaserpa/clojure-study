@@ -272,7 +272,42 @@ No caso de funções com efeito colateral, não é interessante mesclarmos lazy 
 Para grupos grandes e finitos, é interessante utilizarmos o processo lazy.
 Precisamos sempre pensar se faz sentido otimizar o programa por essa via, e muitas vezes não será, pois nem sempre trabalhamos com vetores e listas de um milhão de elementos, por exemplo.
 
-   
+## [Curso 3](hospital) - Clojure: mutabilidade com átomos e refs
+
+### [Peek](https://clojuredocs.org/clojure.core/peek)
+
+Para uma lista ou fila, captura o primeiro elemento, o mesmo que o `first`. <br>
+Para um vetor captura o último elemento, o mesmo que `last`, mas muito mais eficiente.
+Se a coleção estiver vazia, retorna `nil`.
+
+```clojure
+      user=> (peek '(1 2 3 4)) ;;=> 1
+      user=> (peek [1 2 3 4]) ;;=> 4
+      user=> (peek []) ;;=> nil
+```
+
+### [Pop](https://clojuredocs.org/clojure.core/pop)
+
+Para uma lista ou fila remove o primeiro item. <br>
+Para um vetor remove o último item.
+Se a coleção está vazia, lança uma exceção. Nota - não é o mesmo como próximo/último.
+```clojure
+      user=> (pop '(1 2 3 4)) ;;=> (2 3 4)
+      user=> (pop [1 2 3 4]) ;;=> [1 2 3]
+      user=> (pop []) ;;=> nil
+      (pop ())        ;;IllegalStateException Can't pop empty list
+```
+
+### [Conj](https://clojuredocs.org/clojure.core/conj)
+
+Retorna uma nova coleção com o xs 'adicionado'.
+A adição pode acontecer em diferentes 'lugares' dependendo do tipo concreto.
+```clojure
+    (conj [1 2 3] 4) ;;=> [1 2 3 4] adiciona ao final do vetor
+    (conj '(1 2 3) 4) ;;=> (4 1 2 3) adiciona ao início da lista
+```
+
+
 ## Intellij IDE
 Adicionar o plugin "Cursive".
 No menu "Code" encontra-se a opção "Reformat code".
@@ -283,3 +318,6 @@ Alguns atalhos:
  - Cmd + Shift + K adiciona para dentro do escopo algo à direita dos parêntesis.
  - Cmd + Shift + J remove do escopo algo para a direita dos parêntesis.
  - Cmd + Alt + L identação
+ - Ctrl + G seleciona a próxima ocorrência
+ - Cmd + Backspace remove toda a linha
+ - Alt + Shift + Up/Down move uma linha
