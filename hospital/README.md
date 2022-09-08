@@ -36,3 +36,21 @@ A adição pode acontecer em diferentes 'lugares' dependendo do tipo concreto.
     (conj [1 2 3] 4) ;;=> [1 2 3 4] adiciona ao final do vetor
     (conj '(1 2 3) 4) ;;=> (4 1 2 3) adiciona ao início da lista
 ```
+
+### [Ex-info](https://clojuredocs.org/clojure.core/ex-info)
+
+Cria uma instância de ExceptionInfo, uma subclasse RuntimeException que carrega um mapa de dados adicionais.
+```clojure
+    (throw
+      (ex-info "This exception is not caught" {:useless :data}))
+```
+
+### [Atom](https://clojuredocs.org/clojure.core/atom)
+
+Cria e retorna um Atom com um valor inicial de x e zero ou mais opções (em qualquer ordem).
+Se o mapa de metadados for fornecido, ele se tornará os metadados no átomo.
+
+### [Swap!](https://clojuredocs.org/clojure.core/swap!)
+
+Troca atomicamente o valor do átomo para ser: `(apply f current-value-of-atom args)`.
+Note que `f` pode ser chamado várias vezes e, portanto, deve estar livre de efeitos colaterais.
