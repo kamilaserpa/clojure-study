@@ -22,5 +22,14 @@
   [hospital departamento]
   (update hospital departamento pop))
 
+; Adiciona paciente ao final de uma fila de departamento
+; Simulando vários processamentos em paralelo no servidor
+; Erro de imprevisibilidade da ordem de execução
+(defn chega-em-pausado
+  [hospital departamento pessoa]
+  (if (cheio? hospital departamento)
+    (do (Thread/sleep (* (rand) 1000))                                 ; utiliza-se 'do' para caos true com mais de um bloco
+        (update hospital departamento conj pessoa))
+    (throw (ex-info "Fila já está cheia!" {:tentando-adicionar pessoa}))))
 
 
