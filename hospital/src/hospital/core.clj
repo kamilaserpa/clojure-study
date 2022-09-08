@@ -1,5 +1,6 @@
 (ns hospital.core
-  (:use [clojure pprint]))
+  (:use [clojure pprint])
+  (:require [hospital.model :as h.model]))
 
 ; Fila de espera geral
 ; laboratorio1 - fila do lab1
@@ -45,8 +46,17 @@
   (let [espera (conj clojure.lang.PersistentQueue/EMPTY "111" "222")] ; adiciona os elementos "111" e "222" em uma fila vazia
     (println "> fila (seq):" (seq espera))                  ; conseguimos utilizar o println transformando em sequencia
     (println "> conj (fila):" (seq (conj espera "333")))    ; conj - adiciona elemento ao final da fila
-    (println "> conj (fila):" (seq (pop espera)))           ; pop - remove elemento do final da fila
+    (println "> pop (fila):" (seq (pop espera)))            ; pop - remove elemento do final da fila
     (println "> peek (fila):" (peek espera))                ; peek - captura o primeiro elemento da fila
     (pprint espera)))                                       ; pprint a Pretty Printer for clojure aceita apenas um argumento
 
 (testa-fila)
+
+(println "----------------------------")
+
+(let [hospital-da-ka (h.model/novo-hospital)]
+  (pprint hospital-da-ka))
+
+
+
+
