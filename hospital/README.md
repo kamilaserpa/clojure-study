@@ -69,3 +69,14 @@ Apesar da abordagem mais comum de Clojure ser o sistema de retry de transações
 ### [Deref](https://clojuredocs.org/clojure.core/deref)
 Dereferenciar o átomo com deref para acessar a fila de espera dentro de um mapa.
 Quando aplicado a um var, agent ou atom, retorna seu estado atual.
+
+### [Partial](https://clojuredocs.org/clojure.core/partial)
+Recebe uma função `f` e quantidade menor do que os argumentos normais para f, e retorna um `fn` que recebe um número variável de argumentos adicionais.
+Quando chamada, a função retornada chama f com argumentos + argumentos adicionais.
+```clojure
+    (def subtract-from-hundred (partial - 100))
+    (subtract-from-hundred 10)      ; same as (- 100 10)
+    ; 90
+    (subtract-from-hundred 10 20)   ; same as (- 100 10 20)
+    ; 70
+```
