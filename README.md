@@ -336,6 +336,9 @@ para realizar a alteração.
 
 Apesar da abordagem mais comum de Clojure ser o sistema de retry de transações com átomos, a linguagem disponibiliza uma forma de trabalhar com locking também como o uso de travas de monitoramento com https://clojuredocs.org/clojure.core/locking.
 
+### [Deref](https://clojuredocs.org/clojure.core/deref)
+Dereferenciar o átomo com deref para acessar a fila de espera dentro de um mapa.
+Quando aplicado a um var, agent ou atom, retorna seu estado atual.
 
 
 
