@@ -25,11 +25,21 @@
 ; Adiciona paciente ao final de uma fila de departamento
 ; Simulando vários processamentos em paralelo no servidor
 ; Erro de imprevisibilidade da ordem de execução
+; Função malvada não pura pois utiliza randon trazendo comportamentos diferentes para cada chamada
 (defn chega-em-pausado
   [hospital departamento pessoa]
+  (Thread/sleep (* (rand) 1000))
   (if (cheio? hospital departamento)
-    (do (Thread/sleep (* (rand) 1000))                                 ; utiliza-se 'do' para caos true com mais de um bloco
-        (update hospital departamento conj pessoa))
+    (do                                                     ;(Thread/sleep (* (rand) 1000))                                 ; utiliza-se 'do' para caos true com mais de um bloco
+      (update hospital departamento conj pessoa))
     (throw (ex-info "Fila já está cheia!" {:tentando-adicionar pessoa}))))
 
 
+(defn chega-em-pausado-logando
+  [hospital departamento pessoa]
+  (println "Tentando adicionar a pessoa" pessoa)
+  (Thread/sleep (* (rand) 1000))
+  (if (cheio? hospital departamento)
+    (do (println "Dei o update:" pessoa)
+        (update hospital departamento conj pessoa))
+    (throw (ex-info "Fila já está cheia!" {:tentando-adicionar pessoa}))))

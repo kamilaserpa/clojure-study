@@ -54,3 +54,15 @@ Se o mapa de metadados for fornecido, ele se tornará os metadados no átomo.
 
 Troca atomicamente o valor do átomo para ser: `(apply f current-value-of-atom args)`.
 Note que `f` pode ser chamado várias vezes e, portanto, deve estar livre de efeitos colaterais.
+O `swap!` deve ser utilizado com uma função que não apresenta problemas ao ser chamada novamente,
+com threads concorrentes ele percebe quano o valor de uma variável é alterado e realiza uma nova chamada da função,
+caracterizando `busy retry`, ou seja, constante tentativa.
+
+Então, a vantagem do átomo é pararmos de ter trabalhos desnecessários com o programa de acesso de funções, valores, travas etc. 
+para simplesmente chamar o `swap!` ou recurso equivalente com uma função pura que executa o mínimo possível 
+para realizar a alteração.
+
+### [Locking](https://clojuredocs.org/clojure.core/locking)
+
+Apesar da abordagem mais comum de Clojure ser o sistema de retry de transações com átomos, a linguagem disponibiliza uma forma de trabalhar com locking também como o uso de travas de monitoramento com https://clojuredocs.org/clojure.core/locking.
+

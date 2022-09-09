@@ -26,4 +26,28 @@
     (swap! hospital-silveira update :laboratorio1 conj "111")
     (pprint @hospital-silveira)))
 
-(testa-atomao)
+;(testa-atomao)
+
+(println "----------------------------")
+
+#_(defn chega-em-malvado! [hospital pessoa]
+    (swap! hospital h.logic/chega-em-pausado-logando :espera pessoa)
+    (println "> Após inserir" pessoa))
+
+(defn chega-em-malvado! [hospital pessoa]
+  (swap! hospital h.logic/chega-em :espera pessoa)
+  (println "> Após inserir" pessoa))
+
+(defn simula-um-dia-em-paralelo
+  []
+  (let [hospital (atom (h.model/novo-hospital))]
+    (.start (Thread. (fn [] (chega-em-malvado! hospital "111")))) ; cria um objeto em java que é uma Thread e chama o método .start do objeto
+    (.start (Thread. (fn [] (chega-em-malvado! hospital "222"))))
+    (.start (Thread. (fn [] (chega-em-malvado! hospital "333"))))
+    (.start (Thread. (fn [] (chega-em-malvado! hospital "444"))))
+    (.start (Thread. (fn [] (chega-em-malvado! hospital "555"))))
+    (.start (Thread. (fn [] (chega-em-malvado! hospital "666"))))
+    (.start (Thread. (fn [] (Thread/sleep 4000)
+                       (pprint hospital))))))
+
+(simula-um-dia-em-paralelo)
