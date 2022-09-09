@@ -99,4 +99,40 @@
     (.start (Thread. (fn [] (Thread/sleep 4000)
                        (pprint hospital))))))
 
-(simula-um-dia-em-paralelo-com-partial)
+;(simula-um-dia-em-paralelo-com-partial)
+
+(println "----------------------------")
+
+(defn starta-thread-de-chegada
+  [hospital pessoa]
+  (.start (Thread. (fn [] (chega-sem-malvadeza! hospital pessoa)))))
+
+(defn simula-um-dia-em-paralelo-com-doseq
+  "Preocupado em executar para os elementos da sequência"
+  []
+  (let [hospital (atom (h.model/novo-hospital))
+        pessoas ["111", "222", "333", "444", "555", "666"]]
+
+    (doseq [pessoa pessoas]
+      (starta-thread-de-chegada hospital pessoa))
+
+    (.start (Thread. (fn [] (Thread/sleep 4000)
+                       (pprint hospital))))))
+
+;(simula-um-dia-em-paralelo-com-doseq)
+
+(println "----------------------------")
+; dotimes importa-se mais ocm o número de vezes que o código é executado
+
+(defn simula-um-dia-em-paralelo-com-dotimes
+  "Preocupado em executar N vezes"
+  []
+  (let [hospital (atom (h.model/novo-hospital))]
+
+    (dotimes [pessoa 6]                                     ; range de 0 a 5
+      (starta-thread-de-chegada hospital pessoa))
+
+    (.start (Thread. (fn [] (Thread/sleep 4000)
+                       (pprint hospital))))))
+
+(simula-um-dia-em-paralelo-com-dotimes)

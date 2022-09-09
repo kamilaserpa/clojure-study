@@ -351,6 +351,37 @@ Quando chamada, a função retornada chama f com argumentos + argumentos adicion
     ; 70
 ```
 
+### [Doseq](https://clojuredocs.org/clojure.core/doseq)
+
+Executa repetidamente o corpo (presumivelmente com efeitos colaterais) com ligações e filtragem conforme
+fornecido por um "for". Retorna zero.
+```clojure
+    (doseq [x [-1 0 1] ; multiplicada cada x por cada y
+            y [1  2 3]]
+      (prn (* x y)))
+        -1 ; x -1 y 1
+        -2 ; x -1 y 2
+        -3 ; x -1 y 3
+        0  ; x 0  y 1
+        0  ; x 0  y 2
+        0  ; x 0  y 3
+        1  ; x 1  y 1
+        2  ; x 1  y 2
+        3  ; x 1  y 3
+        nil
+```
+
+### [Dotimes](https://clojuredocs.org/clojure.core/dotimes)
+Executa repetidamente o corpo (presumivelmente aplica efeitos colaterais) com o nome ligado a inteiros de 0 a n-1.
+
+```clojure
+    user=> (dotimes [n 4] (println "n is" n))
+    n is 0
+    n is 1
+    n is 2
+    n is 3
+    nil
+```
 
 ## Intellij IDE
 Adicionar o plugin "Cursive".
