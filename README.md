@@ -388,6 +388,15 @@ Executa repetidamente o corpo (presumivelmente aplica efeitos colaterais) com o 
     nil
 ```
 
+### [Juxt](https://clojuredocs.org/clojure.core/juxt)
+Recebe um conjunto de funções e retorna um fn que é a justaposição desses fns.
+O fn retornado recebe um número variável de argumentos e retorna um vetor contendo o resultado da aplicação de cada fn ao args (da esquerda para a direita).
+
+```clojure
+    ; Executa a fn ':a' em seguida a fn ':b' e retorna os valores em um vetor
+    ((juxt :a :b) {:a 1 :b 2 :c 3 :d 4})    ;;=> [1 2]
+```
+
 ## Intellij IDE
 Adicionar o plugin "Cursive".
 No menu "Code" encontra-se a opção "Reformat code".
