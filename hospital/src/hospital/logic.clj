@@ -1,5 +1,5 @@
 (ns hospital.logic)
-; COnsideramos que no hospital há um limite de 5 pessoas por fila
+; Consideramos que no hospital há um limite de 5 pessoas por fila
 
 
 (defn cabe-na-fila? [hospital departamento]
@@ -9,7 +9,7 @@
       (<,,, 5)))                                            ; verifica se é menor que 5
 
 
-; Adiciona paciente ao final de uma fila de departamento
+; Adiciona paciente no final da fila de um departamento
 (defn chega-em
   [hospital departamento pessoa]
   (if (cabe-na-fila? hospital departamento)
@@ -17,13 +17,13 @@
     (throw (ex-info "Fila já está cheia!" {:tentando-adicionar pessoa})))) ; lançando exception
 
 
-; Remove primeiro paciente da fila do departamento
+; Remove o primeiro paciente da fila de um departamento
 (defn atende
   [hospital departamento]
   (update hospital departamento pop))
 
 
-(defn proxima [hospital departamento]
+(defn proximo [hospital departamento]
   "Retorna o próximo (primeiro) paciente da fila de um departamento"
   (-> hospital
       departamento
@@ -31,7 +31,7 @@
 
 ; Remove o primeiro paciente da fila de espera e adiciona na fila de um laboratório
 (defn transfere [hospital departamento-origem departamento-destino]
-  (let [pessoa (proxima hospital departamento-origem)]
+  (let [pessoa (proximo hospital departamento-origem)]
     (-> hospital
         (atende departamento-origem)
         (chega-em departamento-destino pessoa))))

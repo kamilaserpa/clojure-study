@@ -332,6 +332,11 @@ Então, a vantagem do átomo é pararmos de ter trabalhos desnecessários com o 
 para simplesmente chamar o `swap!` ou recurso equivalente com uma função pura que executa o mínimo possível 
 para realizar a alteração.
 
+
+Caso tenhamos a preocupação de usar uma operação `swap!`, basta lembrar da segurança de `retry`;
+ou seja, se algo for alterado, o átomo tenta novamente a transação, invocando a função novamente
+com novos valores dos argumentos e finalizando a execução com sucesso.
+
 ### [Locking](https://clojuredocs.org/clojure.core/locking)
 
 Apesar da abordagem mais comum de Clojure ser o sistema de retry de transações com átomos, a linguagem disponibiliza uma forma de trabalhar com locking também como o uso de travas de monitoramento com https://clojuredocs.org/clojure.core/locking.
