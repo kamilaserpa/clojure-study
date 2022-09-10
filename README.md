@@ -397,6 +397,71 @@ O fn retornado recebe um número variável de argumentos e retorna um vetor cont
     ((juxt :a :b) {:a 1 :b 2 :c 3 :d 4})    ;;=> [1 2]
 ```
 
+### [Ref](https://clojuredocs.org/clojure.core/ref)
+Enquanto as Vars garantem o uso seguro de locais de armazenamento mutáveis por meio do isolamento de thread, as referências transacionais (Refs) garantem o uso compartilhado seguro de locais de armazenamento mutáveis por meio de um sistema de memória transacional de software (STM).
+As refs são vinculadas a um único local de armazenamento por toda a sua vida útil e só permitem que a mutação desse local ocorra dentro de uma transação (https://clojure.org/reference/refs).
+```clojure
+    ; create(ref)
+    (def a (ref '(1 2 3)))
+    
+    ; read(deref)
+    (deref a) ; -> (1 2 3)
+    
+    ; rewrite(ref-set)
+    ; (ref-set a '(3 2 1)) err!
+    (dosync (ref-set a '(3 2 1)))
+    
+    (deref a) ; -> (3 2 1)
+```
+
+### [Ref-set](https://clojuredocs.org/clojure.core/ref-set)
+
+Deve ser chamado em uma transação. Define o valor de ref, retorna val: `(ref-set ref val)`.
+```clojure
+    (def foo (ref {}))
+
+    (dosync
+         (ref-set foo {:foo "bar"}))
+
+    @foo
+    ;{:foo "bar"}
+```
+
+### [Dosync](https://clojuredocs.org/clojure.core/dosync)
+Executa o exprs (em um `do` implícito) em uma transação que engloba exprs e quaisquer chamadas aninhadas.
+Inicia uma transação se nenhuma já estiver executando. Quaisquer efeitos em refs serão atômicos.
+```clojure
+    ; (dosync & exprs)
+    ;; Create 2 bank accounts
+    (def acc1 (ref 100))
+    (def acc2 (ref 200))
+    
+    ;; How much money is there?
+    (println @acc1 @acc2)
+    ;; => 100 200
+    
+    ;; Either both accounts will be changed or none
+    (defn transfer-money [a1 a2 amount]
+      (dosync
+        (alter a1 - amount)
+        (alter a2 + amount)
+        amount)) ; return amount from dosync block and function (just for fun)
+    
+    ;; Now transfer $20
+    (transfer-money acc1 acc2 20)
+    ;; => 20
+    
+    ;; Check account balances again
+    (println @acc1 @acc2)
+    ;; => 80 220
+    
+    ;; => We can see that transfer was successful
+```
+
+### [Alter](https://clojuredocs.org/clojure.core/alter)
+Deve ser chamado em uma transação `(alter ref fun & args)`.
+Define o valor-em-transacao de ref para `(apply fn valor-em-transacao args)` e retorna o valor-em-transacao do ref.
+
 ## Intellij IDE
 Adicionar o plugin "Cursive".
 No menu "Code" encontra-se a opção "Reformat code".
