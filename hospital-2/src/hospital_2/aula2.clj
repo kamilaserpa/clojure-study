@@ -1,5 +1,6 @@
 (ns hospital_2.aula2
-  (:use clojure.pprint))
+  (:use clojure.pprint)
+  (:import (java.text.spi DateFormatSymbolsProvider)))
 
 (defrecord Paciente [id, nome, nascimento])
 
@@ -40,3 +41,25 @@
   (println "Deve assinar pre-autorização?" (deve-assinar-pre-autorizacao? plano, :raio-x, 40))
   (println "Deve assinar pre-autorização?" (deve-assinar-pre-autorizacao? plano, :ressonancia, 40)))
 
+(println "------------------ Polimorfismo-------------------")
+
+(defprotocol Dateable
+  (to-ms [this]))
+
+(extend-type Number
+  Dateable
+  (to-ms [this] this))
+
+(pprint (to-ms 56))
+
+(extend-type java.util.Date
+  Dateable
+  (to-ms [this] (.getTime this)))
+
+(println "Date:" (to-ms (java.util.Date.)))                 ; . chama o constructor
+
+(extend-type java.util.Calendar
+  Dateable
+  (to-ms [this] (to-ms (.getTime this))))                   ; .getTime retorna um Date, invocando o 'to-ms' para Date
+
+(println "Calendar:" (to-ms (java.util.GregorianCalendar.)))
