@@ -191,3 +191,6 @@ Inicia uma transação se nenhuma já estiver executando. Quaisquer efeitos em r
 Deve ser chamado em uma transação `(alter ref fun & args)`.
 Define o valor-em-transacao de ref para `(apply fn valor-em-transacao args)` e retorna o valor-em-transacao do ref.
 
+### [Ensure](https://clojuredocs.org/clojure.core/ensure)
+Ensure somente garante que o valor não foi alterado durante a transação.
+Imagina uma situação onde você precisa garantir que algo não foi alterado em um valor para que a transação ocorra, um ensure é a forma de garantir somente isso.
