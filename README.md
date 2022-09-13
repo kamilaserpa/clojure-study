@@ -523,6 +523,18 @@ Estenda um [tipo] para implementar um ou mais [protocolos]. Pode ser compreendid
         (* 158 (:qty item))))
 ```
 
+### [Defmulti](https://clojuredocs.org/clojure.core/defmulti)
+
+`(defmulti name docstring? attr-map? dispatch-fn & options)` <br>
+Cria um novo multimethod com a função 'dispatch-fn' associada, símbolos terminados com "?" são opcionais.
+
+### [Defmethod](https://clojuredocs.org/clojure.core/defmethod)
+
+`(defmethod multifn dispatch-val & fn-tail)` <br>
+Cria e instala um novo multimethod asociado ao `dispatch-val`.
+Veja um exemplo em [hospital-2/src/hospital_2/defmulti_example.clj](hospital-2/src/hospital_2/defmulti_example.clj).
+
+
 ## Intellij IDE
 Adicionar o plugin "Cursive".
 No menu "Code" encontra-se a opção "Reformat code".
