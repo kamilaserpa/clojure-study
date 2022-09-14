@@ -90,3 +90,20 @@ Veja um exemplo em [hospital-2/src/hospital_2/defmulti_example.clj](hospital-2/s
     (println (greeting {:language "French"}))    ; "Bonjour!"
     (println (greeting {:language "Spanish"}))   ; java.lang.IllegalArgumentException: I don't know the Spanish language
 ```
+
+### [Cond](https://clojuredocs.org/clojure.core/cond)
+
+`cond & clauses` Recebe um conjunto de pares de teste/expressões. Ele avalia cada teste um por um.
+Se um teste retornar true, `cond` avalia e retorna o valor da expr correspondente e não avalia nenhuma das outros testes ou exprs seguintes.
+```clojure
+    (defn pos-neg-or-zero
+      [n]
+      (cond
+        (< n 0) "negative"
+        (> n 0) "positive"
+        :else "zero"))
+    
+    (pos-neg-or-zero 5) ; "positive"
+    (pos-neg-or-zero -1) ; "negative"
+    (pos-neg-or-zero 0) ; "zero"
+```
