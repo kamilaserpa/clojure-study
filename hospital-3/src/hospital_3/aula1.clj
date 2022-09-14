@@ -63,6 +63,12 @@
 ; que o valor passado como parâmetro não condiz com o schema Long
 ; (testa-uso-de-pacientes) ; Exception
 
+(s/defn novo-paciente
+  [id :- Long, nome :- s/Str]
+  {:id id, :nome nome})
+
+(pprint (novo-paciente 15 "Guilherme"))
+(pprint (novo-paciente 17 "Joe"))
 
 (println "-------------- Testando schema ---------------")
 
