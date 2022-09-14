@@ -612,6 +612,39 @@ Retorna true se a chave estiver presente na coleção fornecida, caso contrário
     (contains? s "z")   ;=> false
 ```
 
+### Schema
+
+Adicionamos ao projeto a biblioteca [Schema](https://github.com/plumatic/schema), uma dependência para descrição e validação de dados declarativos. É possível acessar sua documentação aqui: [https://plumatic.github.io/schema/schema.core.html](https://plumatic.github.io/schema/schema.core.html).
+
+#### [s/defn](https://plumatic.github.io/schema/schema.core.html#var-defn)
+Define uma função assim como no Clojure, porém pode fornecer tipos de schema aos símbolos do argumento e do nome da função (para valor de retorno).
+```clojure
+    (s/set-fn-validation! true)
+    
+    (s/defn foo :- s/Num                     ; schema de retorno da fn: Num
+      [x :- s/Int                            ; schema do símbolo x
+       y :- s/Num]
+      (* x y))
+
+    (pprint (foo 2.5 4))                     ; Exception, 2.5 not integer
+    (pprint (foo (foo 2 2.3) 1.5))           ; Exception, 2.6 not integer
+```
+
+#### s/fn-schema
+Obtém o esquema de uma função:
+
+`(println (s/fn-schema foo))         ; (=> Num Int Num)`
+
+#### s/set-fn-validation
+Indica que a partir daquele trecho será habilitada a checagem em tempo de execução.
+`(s/set-fn-validation! true)`
+
+Parecido temos a macro "s/with-fn-validation" que habilita a checagem dentro de seu escopo.
+`(s/with-fn-validation (foo 1 2))    ; ==> 2`
+
+
+
+
 ## Intellij IDE
 Adicionar o plugin "Cursive".
 No menu "Code" encontra-se a opção "Reformat code".
@@ -625,3 +658,4 @@ Alguns atalhos:
  - Ctrl + G seleciona a próxima ocorrência
  - Cmd + Backspace remove toda a linha
  - Alt + Shift + Up/Down move uma linha
+ - Para realizar o download de uma dependência acesse a barra lateral direita "Leiningen" e clique em "Refresh Leiningen Projects"

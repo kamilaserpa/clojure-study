@@ -1,5 +1,7 @@
 (ns hospital-3.aula1
-  (:use clojure.pprint))
+  (:use clojure.pprint)
+  (:require [schema.core :as s]))                           ;; cljs only
+
 
 (defn adiciona-paciente [pacientes paciente]                ; recebe uma lista de pacientes, e um paciente a ser adicionado
   (if-let [id (:id paciente)]
@@ -38,3 +40,54 @@
     (println (get visitas 15))))
 
 (testa-uso-de-pacientes)
+
+(println "---------------SCHEMA--------------\n")
+
+; Usando Schema
+(pprint (s/validate Long 15))
+; (pprint (s/validate Long "Kamila"))                         ; erro, "Kamila" não é uma instância de Long
+
+(s/set-fn-validation! true)                                 ; habilita a checagem em tempo de execução
+
+(s/defn teste-simples [x :- Long]                           ; ":-" indica que x segue o schema Long
+  (println x))
+
+(teste-simples 30)
+; (teste-simples "Luiza")                                     ; Exception, Luiza is not Long
+
+(s/defn imprime-relatorio-de-paciente
+  [visitas, paciente :- Long]
+  (println "Visitas do paciente" paciente "são" (get visitas paciente)))
+
+; Agora conseguimos o erro em tempo de *execução* que informa
+; que o valor passado como parâmetro não condiz com o schema Long
+; (testa-uso-de-pacientes) ; Exception
+
+
+(println "-------------- Testando schema ---------------")
+
+(s/defn foo :- s/Num                                        ; schema de retorno da fn Num
+  [x :- s/Int                                               ; schema do símbolo x
+   y :- s/Num]
+  (* x y))
+
+(s/defn hi-text
+  [x :- String]
+  "Hi!")
+
+(s/defn hi-number :- String
+  [x]                                                       ; Define schema de retorno como String, mas está retornando um number
+  x)
+
+(pprint (foo 2 2.5))                                        ; 5.0
+; (pprint (foo 2.5 4))                                        ; Exception, 2.5 not integer
+; (pprint (foo (foo 2 2.3) 1.5))                              ; Exception, 2.6 not integer
+; (pprint (hi-text (foo 2 3)))                                ; Exception, 6 not String
+; (pprint (hi-number 3))                                      ; Exception, 'Output of hi-number does not match schema', 3 not String
+
+
+(println "Schemas da fn 'foo':" (s/fn-schema foo))          ; Obtém schemas da função
+(println "Schemas da fn 'hi-number':" (s/fn-schema hi-number))
+
+(pprint (s/with-fn-validation (foo 1 2)))                   ; verificação em tempo de execução de entradas de função e saídas.
+(s/with-fn-validation (foo 1.5 2))                          ; Exception Input to foo does not match schema, 1.5 is not integer
