@@ -63,9 +63,30 @@ Estenda um [tipo] para implementar um ou mais [protocolos]. Pode ser compreendid
 
 `(defmulti name docstring? attr-map? dispatch-fn & options)` <br>
 Cria um novo multimethod com a função 'dispatch-fn' associada, símbolos terminados com "?" são opcionais.
+A função `dispatch-fn` pode ser utilizada e ao retornar um valor, este pode ser atribuído à `dispatch-val` do `defmethod`.
+Desse modo podemos definir métodos, comportamentos distintos para cada valor retornado.
 
 ### [Defmethod](https://clojuredocs.org/clojure.core/defmethod)
 
 `(defmethod multifn dispatch-val & fn-tail)` <br>
 Cria e instala um novo multimethod asociado ao `dispatch-val`.
 Veja um exemplo em [hospital-2/src/hospital_2/defmulti_example.clj](hospital-2/src/hospital_2/defmulti_example.clj).
+
+```clojure
+    (defmulti greeting
+              (fn [x] (:language x))) ; a propriedade 'language' é passada como parâmetro para as implementações
+    
+    (defmethod greeting "English" [params]
+      "Hello!")
+    
+    (defmethod greeting "French" [params]
+      "Bonjour!")
+    
+    (defmethod greeting :default [params]        ; default handling
+      (throw (IllegalArgumentException.
+               (str "I don't know the " (:language params) " language"))))
+    
+    (println (greeting {:language "English"}))   ; "Hello!"
+    (println (greeting {:language "French"}))    ; "Bonjour!"
+    (println (greeting {:language "Spanish"}))   ; java.lang.IllegalArgumentException: I don't know the Spanish language
+```

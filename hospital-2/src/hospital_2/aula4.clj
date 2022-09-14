@@ -74,8 +74,51 @@
 ; Explorando defmulti
 (defn minha-funcao [p]
   (println p)
-  (class p)) ; devolve a classe de 'p'
+  (class p))                                                ; devolve a classe de 'p'
 
 (defmulti multi-teste minha-funcao)
-(multi-teste "kamila")
-(multi-teste :guitarrista)
+;(multi-teste "kamila")
+;(multi-teste :guitarrista)
+
+(println "---------------------------------\n")
+
+; pedido { :paciente paciente, :valor valor, :procedimento procedimento }
+
+; Um pouco feio, misturando keywork e classe como chave
+; Funcao testável, habilitando polimorfismo por um valor específico (sempre-autorizado) e por classes (PacienteParticular e PacientePlanoDeSaude)
+(defn tipo-de-autorizador [pedido]
+  (let [paciente (:paciente pedido)
+        situacao (:situacao paciente)
+        urgencia? (= :urgente situacao)]
+    (if urgencia?
+      :sempre-autorizado
+      (class paciente))))
+
+(defmulti deve-assinar-pre-autorizacao-do-pedido? tipo-de-autorizador)
+
+; Implementações de acordo com o retornado pela função 'tipo-de-autorizacao'
+(defmethod deve-assinar-pre-autorizacao-do-pedido? :sempre-autorizado [pedido]
+  false)
+
+(defmethod deve-assinar-pre-autorizacao-do-pedido?
+  PacienteParticular [pedido]
+  (>= (:valor pedido 0) 50))
+
+(defmethod deve-assinar-pre-autorizacao-do-pedido?
+  PacientePlanoDeSaude [pedido]
+  (not (some #(= % (:procedimento pedido)) (:plano (:paciente pedido)))))
+
+;
+(println "> Verificando pacientes com urgência (com defmulti):")
+(let [particular (->PacienteParticular 15, "Guilherme", "18/09/1981", :urgente)
+      plano (->PacientePlanoDeSaude 15, "Guilherme", "18/09/1981", :urgente, [:raio-x, :ultrassonografia])]
+  (pprint (deve-assinar-pre-autorizacao-do-pedido? {:paciente particular, :valor 1000, :procedimento :coleta-de-sangue}))
+  (pprint (deve-assinar-pre-autorizacao-do-pedido? {:paciente plano, :valor 1000, :procedimento :coleta-de-sangue})))
+
+(println "> Verificando pacientes (com defmulti):")
+(let [particular (->PacienteParticular 15, "Guilherme", "18/09/1981", :normal)
+      plano (->PacientePlanoDeSaude 15, "Guilherme", "18/09/1981", :normal, [:raio-x, :ultrassonografia])]
+  (pprint (deve-assinar-pre-autorizacao-do-pedido? {:paciente particular, :valor 1000, :procedimento :coleta-de-sangue}))
+  (pprint (deve-assinar-pre-autorizacao-do-pedido? {:paciente plano, :valor 1000, :procedimento :raio-x}))
+  (pprint (deve-assinar-pre-autorizacao-do-pedido? {:paciente plano, :valor 1000, :procedimento :coleta-de-sangue})))
+

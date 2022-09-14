@@ -4,28 +4,23 @@
 ;does not have to be a symbol, but can be anything (in this case, it's a string)
 
 (defmulti greeting
-          (fn [x] (get x "language")))
+          (fn [x] (:language x))) ; a propriedade 'language' é passada como parÂmetro para as implementações
 
 ;params is not used, so we could have used [_]
 (defmethod greeting "English" [params]
   "Hello!")
 
-(defmethod greeting "French" [_]
+(defmethod greeting "French" [params]
   "Bonjour!")
 
 ;;default handling
 (defmethod greeting :default [params]
   (throw (IllegalArgumentException.
-           (str "I don't know the " (get params "language") " language"))))
+           (str "I don't know the " (:language params) " language"))))
 
-;then can use this like this:
-(def english-map {"id" "1", "language" "English"})
-(def french-map {"id" "2", "language" "French"})
-(def spanish-map {"id" "3", "language" "Spanish"})
-
-(println (greeting english-map))
+(println (greeting {:language "English"}))
 ; "Hello!"
-(println (greeting french-map))
+(println (greeting {:language "French"}))
 ; "Bonjour!"
-(println (greeting spanish-map))
+(println (greeting {:language "Spanish"}))
 ; java.lang.IllegalArgumentException: I don't know the Spanish language
