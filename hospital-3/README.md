@@ -78,6 +78,7 @@ Para validar muitos dados, é muito mais eficiente criar um 'validator' uma vez 
 ````clojure
     (s/validate s/Num 42)      ;; 42
     (s/validate s/Num "42")    ;; RuntimeException: Value does not match schema: (not (instance java.lang.Number "42"))
+    (s/validate [s/Num] nil)   ;; Válido - nil considerado vetor vazio
 ````
 
 #### s/pred
