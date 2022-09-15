@@ -43,8 +43,10 @@ Retorna true se a chave estiver presente na coleção fornecida, caso contrário
 
 Adicionamos ao projeto a biblioteca [Schema](https://github.com/plumatic/schema), uma dependência para descrição e validação de dados declarativos. É possível acessar mais informações, além da página do github, aqui: [https://plumatic.github.io/schema/schema.core.html](https://plumatic.github.io/schema/schema.core.html).
 
+Um **schema** é uma estrutura de dados Clojure(Script) que descreve uma forma de dados, que pode ser usada para documentar e validar funções e dados.
+
 #### [s/defn](https://plumatic.github.io/schema/schema.core.html#var-defn)
-Define uma função assim como no Clojure, porém pode fornecer tipos de schema aos símbolos do argumento e do nome da função (para valor de retorno).
+Define uma função assim como no Clojure, porém pode fornecer tipos de schema aos símbolos dos argumentos e ao retorno da função.
 ```clojure
     (s/set-fn-validation! true)
     
@@ -63,9 +65,35 @@ Obtém o esquema de uma função:
 `(println (s/fn-schema foo))         ; (=> Num Int Num)`
 
 #### s/set-fn-validation
-Indica que a partir daquele trecho será habilitada a checagem em tempo de execução.
+Indica que a partir daquele trecho será habilitada a checagem em tempo de execução. Variável global.
 `(s/set-fn-validation! true)`
 
 Parecido temos a macro "s/with-fn-validation" que habilita a checagem dentro de seu escopo.
 `(s/with-fn-validation (foo 1 2))    ; ==> 2`
+
+#### [s/validate](https://plumatic.github.io/schema/schema.core.html#var-validate)
+Lança uma exceção se o valor não satisfizer o schema; caso contrário, retorna o valor.
+Para validar muitos dados, é muito mais eficiente criar um 'validator' uma vez e chamá-lo em cada um deles.
+
+````clojure
+    (s/validate s/Num 42)      ;; 42
+    (s/validate s/Num "42")    ;; RuntimeException: Value does not match schema: (not (instance java.lang.Number "42"))
+````
+
+#### s/pred
+Utilitário para construção de schemas.
+```clojure
+    (pprint (s/validate (s/pred odd?) 5))                       ; 5
+    (pprint (s/validate (s/pred odd?) 2))                       ; Value does not match schema: (not (odd? 2)
+```
+
+#### [s/constrained](https://plumatic.github.io/schema/schema.core.html#var-constrained)
+Utilitário para construção de schemas.
+Um schema com uma pós-condição adicional. Difere de `conditional` com um único schema, em que o predicado é verificado *após* o principal esquema. Isso pode levar a melhores mensagens de erro.
+```clojure
+    (s/defschema OddLong (s/constrained long odd?))             ; valida se é long e ímpar
+    (s/validate OddLong 1)                                      ; pass
+    (s/validate OddLong "try")                                  ; Exception - Value does not match schema: (not (instance? java.lang.Long "try"))
+    (s/validate OddLong 2)                                      ; Exception - Value does not match schema: (not (odd? 2))
+```
 
