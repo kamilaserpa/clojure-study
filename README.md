@@ -691,6 +691,59 @@ Keyworks por padrão determinam schemas obrigatórios, `required-key`.
     (s/validate Paciente {:id 15, :nome "Guilherme"})  ; Exception pois não possui a keywork 'plano'
 ```
 
+## [Curso 6](hospital-4) - Clojure: explorando testes
+
+
+### [Is](https://clojuredocs.org/clojure.test/is)
+Função de asserrção, afirmação mais simples. Caso verdadeiro a assertividade passa, caso contrário verifica falha.
+```clojure
+    (use '[clojure.test :only [is]])
+
+    (is (= 4 (+ 2 2)) "Two plus two should be 4") ; 'msg' é uma mensagem opcional para anexar à declaração
+    (is (true? true))    ; true
+    
+    ;; false assertions print a message and evaluate to false
+    (is (true? false))
+    ;FAIL in clojure.lang.PersistentList$EmptyList@1 (NO_SOURCE_FILE:1)
+    ;expected: (true? false)
+    ;actual: (not (true? false))
+    ;false
+```
+
+### [Deftest](https://clojuredocs.org/clojure.test/deftest)
+
+Define uma função de teste sem argumentos. É uma coleção de afirmações, [com ou sem expressões `testing`](https://practical.li/clojure/testing/unit-testing/writing-unit-tests.html). As funções de teste podem chamar outros testes, para que os testes possam ser compostos.
+
+```clojure
+    ;successful test example
+    (ns testing)
+    (use 'clojure.test)
+        
+    (deftest addition
+             (is (= 4 (+ 2 2)))
+             (is (= 7 (+ 3 4))))        ; => #'testing/addition
+    
+    (deftest subtraction
+             (is (= 1 (- 4 3)))
+             (is (= 3 (- 7 4))))        ; => #'testing/subtraction
+    
+    ;composing tests
+    (deftest arithmetic
+             (addition)
+             (subtraction))
+```
+
+### [Testing](https://clojuredocs.org/clojure.test/testing)
+
+[É uma macro para um conjunto de asserções (afirmações)](https://practical.li/clojure/testing/unit-testing/writing-unit-tests.html). Adiciona uma nova string à lista de contextos de teste. Pode ser aninhado, mas deve ocorrer dentro de uma função de teste (deftest).
+```clojure
+    (deftest alternate-use
+             (testing "test a vector of `is`"
+                      [(is true)
+                       (is true)
+                       (is true)]))
+```
+
 
 ## Intellij IDE
 Adicionar o plugin "Cursive".
@@ -706,3 +759,8 @@ Alguns atalhos:
  - Cmd + Backspace remove toda a linha
  - Alt + Shift + Up/Down move uma linha
  - Para realizar o download de uma dependência acesse a barra lateral direita "Leiningen" e clique em "Refresh Leiningen Projects"
+
+Para executar testes no REPL acessamos Tool na barra superior, REPL, Run testes in Current NS in REPL. Para criar um atalho acessamos Preferências, Keymap, buscamos por "REPL", executamos duplo clique em "Run testes in Current NS in REPL" e criamos o atalho: 
+`Command + Ctrl + T`.
+
+![Print Preferences Intellij](./atalho_teste.png)
