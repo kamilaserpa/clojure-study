@@ -98,3 +98,23 @@ Um schema com uma pós-condição adicional. Difere de `conditional` com um úni
     (s/validate OddLong 2)                                      ; Exception - Value does not match schema: (not (odd? 2))
 ```
 
+#### [s/optional-key](https://github.com/plumatic/schema#map-schemas)
+
+Define uma chave como opcional em um mapa. Se foo estiver presente deverá receber palavras chave.
+```clojure
+    (s/defschema FancyMap
+      "If foo is present, it must map to a Keyword."
+      {(s/optional-key :foo) s/Keyword})
+    
+    (s/validate FancyMap {:foo :a})             ; Ok
+    (s/validate FancyMap {"a" "b"})             ; Exception - Value does not match schema: {"a" disallowed-key}
+```
+Keyworks por padrão determinam schemas obrigatórios, `required-key`.
+```clojure
+    (def Paciente
+      {:id                          PosInt,
+       :nome                        s/Str,
+       :plano                       Plano })           ; se a chave é um keyword 0 ela é obrigatória
+    
+    (s/validate Paciente {:id 15, :nome "Guilherme"})  ; Exception pois não possui a keywork 'plano'
+```

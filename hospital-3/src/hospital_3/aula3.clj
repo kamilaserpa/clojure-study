@@ -1,7 +1,6 @@
 (ns hospital-3.aula3
   (:use clojure.pprint)
-  (:require [schema.core :as s])
-  (:import (javax.security.auth PrivateCredentialPermission$CredOwner)))
+  (:require [schema.core :as s]))
 
 (s/set-fn-validation! true)
 
