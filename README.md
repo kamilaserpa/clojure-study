@@ -2,7 +2,7 @@
 
 Projeto de estudo em acompanhamento aos cursos da Formação Clojure da plataforma de ensino Alura.
 
-## [Curso 1](estoque) - Clojure: programação funcional
+## [Curso 1](curso1_estoque) - Clojure: programação funcional
 
 Para primeira execução deve-se clicar no arquivo "project.clj" e selecionar "Run 'REPL for estoque'",
 onde REPL significa _read-eval-print loop_.
@@ -14,7 +14,7 @@ O comando utilizado para utilizar um namespace específico é `(use 'estoque.aul
 ### Characters Clojure
 
  - Vírgula `,` é tratado como espaço em branco.
- - `_` usado como argumento de função indica que este arugmento não será utilizado.
+ - `_` usado como argumento de função indica que este argumento não será utilizado.
  - [Listas](https://clojure.org/reference/data_structures#Lists) são coleções heterogêneas sequenciais, implementadas como uma lista encadeada.
    ```clojure 
         (1 "two" 3.0)  ; uma lista de três valores
@@ -47,7 +47,8 @@ O comando utilizado para utilizar um namespace específico é `(use 'estoque.aul
         user=> (:one my-map)      ; obtém o valor da key :one invocando como uma função
         1
    ```
- - Funções
+
+### Funções
 
     **Funções** são "coisas", é a maneira informal de dizer que, em Clojure, funções são tratadas como algo muito importante, tão importantes quanto dados.
 Isto é, você pode trabalhar com símbolos que referenciam funções. Funções são "first class citizens".
@@ -97,7 +98,7 @@ Funções que recebem ou retornam funções são chamadas de "higher order funct
    ```
    Na documentação é possível acessar a descrição de diversas funções, [https://clojuredocs.org/clojure.core](https://clojuredocs.org/clojure.core).
 
- - [**Thread**](https://clojure.org/guides/threading_macros)
+### [**Thread**](https://clojure.org/guides/threading_macros)
    - Por convenção, as funções principais que operam em sequências esperam a sequência como seu último argumento. Da mesma forma, pipelines contendo **map**, **filter**, **remove**, **reduce**, **into**, etc geralmente chamam a macro ´->>` "thread last".
    ```clojure
    (defn calculate* []
@@ -114,7 +115,7 @@ Funções que recebem ou retornam funções são chamadas de "higher order funct
              (update ,,, :age inc)))
    ```
 
-## [Curso 2](loja) - Clojure: coleções no dia a dia
+## [Curso 2](curso2_loja) - Clojure: coleções no dia a dia
 
 ### First
 
@@ -272,7 +273,7 @@ No caso de funções com efeito colateral, não é interessante mesclarmos lazy 
 Para grupos grandes e finitos, é interessante utilizarmos o processo lazy.
 Precisamos sempre pensar se faz sentido otimizar o programa por essa via, e muitas vezes não será, pois nem sempre trabalhamos com vetores e listas de um milhão de elementos, por exemplo.
 
-## [Curso 3](hospital) - Clojure: mutabilidade com átomos e refs
+## [Curso 3](curso3_hospital) - Clojure: mutabilidade com átomos e refs
 
 ### [Peek](https://clojuredocs.org/clojure.core/peek)
 
@@ -466,7 +467,7 @@ Define o valor-em-transacao de ref para `(apply fn valor-em-transacao args)` e r
 Ensure somente garante que o valor não foi alterado durante a transação.
 Imagina uma situação onde você precisa garantir que algo não foi alterado em um valor para que a transação ocorra, um ensure é a forma de garantir somente isso.
 
-## [Curso 4](hospital-2) - Clojure: Recors, protocol e multi method
+## [Curso 4](curso4_hospital-2) - Clojure: Recors, protocol e multi method
 
 ### [Defrecord](https://clojuredocs.org/clojure.core/defrecord)
 
@@ -573,7 +574,7 @@ Se um teste retornar true, `cond` avalia e retorna o valor da expr correspondent
     (pos-neg-or-zero 0) ; "zero"
 ```
 
-## [Curso 5](hospital-3) - Clojure: Schemas
+## [Curso 5](curso5_hospital-3) - Clojure: Schemas
 
 ### [Contains?](https://clojuredocs.org/clojure.core/contains_q)
 
@@ -691,8 +692,7 @@ Keyworks por padrão determinam schemas obrigatórios, `required-key`.
     (s/validate Paciente {:id 15, :nome "Guilherme"})  ; Exception pois não possui a keywork 'plano'
 ```
 
-## [Curso 6](hospital-4) - Clojure: explorando testes
-
+## [Curso 6](curso6_hospital-4) - Clojure: explorando testes
 
 ### [Is](https://clojuredocs.org/clojure.test/is)
 Função de asserrção, afirmação mais simples. Caso verdadeiro a assertividade passa, caso contrário verifica falha.
