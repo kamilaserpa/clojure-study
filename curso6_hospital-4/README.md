@@ -51,3 +51,22 @@ Define uma função de teste sem argumentos. É uma coleção de afirmações, [
                        (is true)
                        (is true)]))
 ```
+
+### [some->](https://clojuredocs.org/clojure.core/some-%3E)
+
+Em thread first quando 'nil' é retornado por qualquer etapa, as etapas adicionais não são executadas e retorna 'nil'.
+```clojure
+    (some-> val
+            step1
+            step2
+            step3)
+```
+
+### [When-let](https://clojuredocs.org/clojure.core/when-let)
+
+No exemplo abaixo, se 'test' não for falso nem nulo, test é vinculado à propriedade 'name' e `do-something-with-name` é executado.
+
+```clojure
+    (when-let [name test]
+      (do-something-with-name))
+```
