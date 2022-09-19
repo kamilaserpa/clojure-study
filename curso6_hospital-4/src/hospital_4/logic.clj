@@ -21,6 +21,14 @@
           count
           (< 5)))
 
+#_(defn chega-em
+    [hospital departamento pessoa]
+    (if (cabe-na-fila? hospital departamento)
+      (update hospital departamento conj pessoa)
+      (throw (ex-info "Não cabe ninguém neste departamento." {:paciente pessoa}))))
+
+; Deveria retornar um hospital para que o vetor seja atualizado com esse valor
 (defn chega-em
   [hospital departamento pessoa]
-  (update hospital departamento conj pessoa))
+  (if (cabe-na-fila? hospital departamento)
+    (update hospital departamento conj pessoa)))            ; caso true, atualiza; false, reotorna nil

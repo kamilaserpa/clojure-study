@@ -42,4 +42,28 @@
 
     ; FAZER TESTES NÃO SEQUENCIAIS!
     (is (= {:espera [1, 2, 5]}
-           (chega-em {:espera [1, 2]}, :espera, 5)))))
+           (chega-em {:espera [1, 2]}, :espera, 5))))
+
+  (testing "não aceita quando a fila está cheia"
+
+    ; Verificando que uma Exception foi lançada.
+    ; Código clássico horrível com exception genérica, pois qualquer outro erro genérico lança essa mesma exception
+    ; e nosso teste passaria e não verificaria.
+    #_(is (thrown? clojure.lang.ExceptionInfo
+                   (chega-em {:espera [1 35 42 64 21]}, :espera 76)))
+
+    ; Mesmo escolhendo uma exception do gênero, é perigoso,
+    ; pois algum caso inesperado pode resultar nesta mesma exception
+    #_(is (thrown? IllegalArgumentException
+                   (chega-em {:espera [1 35 42 64 21]}, :espera 76)))
+
+    ; A mensagem em texto pode ser alterada sem dificuldade, abordagem possível, porém não a melhor
+    #_(is (thrown-with-msg? clojure.lang.ExceptionInfo #"Não cabe ninguém neste departamento."
+                            (chega-em {:espera [1, 35, 42, 64, 21]}, :espera 76)))
+
+    ; Abordagem possível, porém essa função deveria retornar um hospital para
+    ; a atualização de um átomo via swap, ao retornar nulo essa funcionalidade é perdida,
+    ; comprometendo e quebrando nossa lógica.
+    (is (nil? (chega-em {:espera [1 35 42 64 21]}, :espera 76)))))
+
+
