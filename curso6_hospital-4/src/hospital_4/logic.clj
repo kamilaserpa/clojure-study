@@ -20,3 +20,7 @@
           departamento                                      ; obtem nil aqui caso seja passado algum departamento ausente no hospital
           count
           (< 5)))
+
+(defn chega-em
+  [hospital departamento pessoa]
+  (update hospital departamento conj pessoa))

@@ -25,6 +25,21 @@
   (testing "Que cabe na fila quando tem pouca gente na fila"
     (is (cabe-na-fila? {:espera [1 2]}, :espera)))
 
-  (testing "Que... quando departamento não existe"
+  (testing "Que não cabe quando departamento não existe"
     ; hospital possui departamento 'espera' apenas
     (is (not (cabe-na-fila? {:espera [1 2 3 4]}, :raio-x)))))
+
+(deftest chega-em-test
+
+  (testing "aceita pessoas enquanto cabem pessoas na fila"
+    ; Implementação ruim, pois testa que escrevemos o que escrevemos,
+    ; ou seja o código no corpo é o memso do código de teste, que é um teste inútil
+    #_(is (= (update {:espera [1, 2, 3, 4]} :espera conj 5)
+             (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
+
+    (is (= {:espera [1, 2, 3, 4, 5]}
+           (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
+
+    ; FAZER TESTES NÃO SEQUENCIAIS!
+    (is (= {:espera [1, 2, 5]}
+           (chega-em {:espera [1, 2]}, :espera, 5)))))
