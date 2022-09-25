@@ -87,3 +87,27 @@ No exemplo abaixo, se 'test' não for falso nem nulo, test é vinculado à propr
     (when-let [name test]
       (do-something-with-name))
 ```
+
+### [Defn-](https://clojuredocs.org/clojure.core/defn-)
+
+O mesmo que defn, produzindo def **não** público.
+```clojure
+    (ns hospital-4.exercises)
+  
+    (defn- foo []
+      "World!")
+    
+    (defn bar []
+      (str "Hello " (foo)))
+    
+    (println (foo))                                 ; "World!"
+    (println (bar))                                 ; "Hello World!"
+    
+    ; Another namespace
+    (ns hospital-4.exercises-test
+      (:require [hospital-4.exercises :as exercises]))
+    
+    (println (exercises/bar))                       ; "Hello World!"
+    
+    (println (exercises/foo))                       ; IllegalStateException, var: #'hospital-4.exercises/foo is not public
+```
