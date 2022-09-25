@@ -32,61 +32,63 @@
 
 (deftest chega-em-test
 
-  (testing "aceita pessoas enquanto cabem pessoas na fila"
-    ; Implementação ruim, pois testa que escrevemos o que escrevemos,
-    ; ou seja o código no corpo é o mesmo do código de teste, que é um teste inútil
-    #_(is (= (update {:espera [1, 2, 3, 4]} :espera conj 5)
+  (let [hospital-cheio {:espera [1 35 42 64 21]}]
+
+    (testing "aceita pessoas enquanto cabem pessoas na fila"
+      ; Implementação ruim, pois testa que escrevemos o que escrevemos,
+      ; ou seja o código no corpo é o mesmo do código de teste, que é um teste inútil
+      #_(is (= (update {:espera [1, 2, 3, 4]} :espera conj 5)
+               (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
+
+      #_(is (= {:espera [1, 2, 3, 4, 5]}
+               (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
+
+      ; FAZER TESTES NÃO SEQUENCIAIS!
+      #_(is (= {:espera [1, 2, 5]}
+               (chega-em {:espera [1, 2]}, :espera, 5)))
+
+      ;------------------------------
+      (is (= {:hospital {:espera [1 2 3 4 5]}, :resultado :sucesso}
              (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
 
-    #_(is (= {:espera [1, 2, 3, 4, 5]}
-             (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
 
-    ; FAZER TESTES NÃO SEQUENCIAIS!
-    #_(is (= {:espera [1, 2, 5]}
-             (chega-em {:espera [1, 2]}, :espera, 5)))
+      (is (= {:hospital {:espera [1 2 5]}, :resultado :sucesso}
+             (chega-em {:espera [1, 2]}, :espera, 5))))
 
-    ;------------------------------
-    (is (= {:hospital {:espera [1 2 3 4 5]}, :resultado :sucesso}
-           (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
+    (testing "não aceita quando a fila está cheia"
 
+      ; Verificando que uma Exception foi lançada.
+      ; Código clássico horrível com exception genérica, pois qualquer outro erro genérico lança essa mesma exception
+      ; e nosso teste passaria e não verificaria.
+      #_(is (thrown? ExceptionInfo
+                     (chega-em hospital-cheio, :espera 76)))
 
-    (is (= {:hospital {:espera [1 2 5]}, :resultado :sucesso}
-           (chega-em {:espera [1, 2]}, :espera, 5))))
+      ; Mesmo escolhendo uma exception do gênero, é perigoso,
+      ; pois algum caso inesperado pode resultar nesta mesma exception
+      #_(is (thrown? IllegalArgumentException
+                     (chega-em hospital-cheio, :espera 76)))
 
-  (testing "não aceita quando a fila está cheia"
+      ; A mensagem em texto pode ser alterada sem dificuldade, abordagem possível, porém não a melhor
+      #_(is (thrown-with-msg? ExceptionInfo #"Não cabe ninguém neste departamento."
+                              (chega-em hospital-cheio, :espera 76)))
 
-    ; Verificando que uma Exception foi lançada.
-    ; Código clássico horrível com exception genérica, pois qualquer outro erro genérico lança essa mesma exception
-    ; e nosso teste passaria e não verificaria.
-    #_(is (thrown? ExceptionInfo
-                   (chega-em {:espera [1 35 42 64 21]}, :espera 76)))
+      ; Abordagem possível, porém essa função deveria retornar um hospital para
+      ; a atualização de um átomo via swap, ao retornar nulo essa funcionalidade é perdida,
+      ; comprometendo e quebrando nossa lógica.
+      ; (is (nil? (chega-em hospital-cheio, :espera 76)))
 
-    ; Mesmo escolhendo uma exception do gênero, é perigoso,
-    ; pois algum caso inesperado pode resultar nesta mesma exception
-    #_(is (thrown? IllegalArgumentException
-                   (chega-em {:espera [1 35 42 64 21]}, :espera 76)))
+      ; Outra maneira de testar
+      ; Verifica o tipo de dados retornados na Exception para capturar o erro
+      ; Vantagem de ser menos sensível que verificação da msg de erro
+      ; Validação trabalhosa
+      #_(is (try
+              (chega-em hospital-cheio, :espera, 76)
+              false                                         ; se deixar inserir pessoas na fila RN falha, não deveria chegar nesta linha
+              (catch ExceptionInfo e
+                (= :impossivel-colocar-pessoa-na-fila (:tipo (ex-data e))))))
 
-    ; A mensagem em texto pode ser alterada sem dificuldade, abordagem possível, porém não a melhor
-    #_(is (thrown-with-msg? ExceptionInfo #"Não cabe ninguém neste departamento."
-                            (chega-em {:espera [1, 35, 42, 64, 21]}, :espera 76)))
-
-    ; Abordagem possível, porém essa função deveria retornar um hospital para
-    ; a atualização de um átomo via swap, ao retornar nulo essa funcionalidade é perdida,
-    ; comprometendo e quebrando nossa lógica.
-    ; (is (nil? (chega-em {:espera [1 35 42 64 21]}, :espera 76)))
-
-    ; Outra maneira de testar
-    ; Verifica o tipo de dados retornados na Exception para capturar o erro
-    ; Vantagem de ser menos sens[ivel que verificaçõ da msg de erro
-    ; Validação trabalhosa
-    #_(is (try
-            (chega-em {:espera [1 35 42 64 21]}, :espera, 76)
-            false                                           ; se deixar inserir pessoas na fila RN falha, não deveria chegar nesta linha
-            (catch ExceptionInfo e
-              (= :impossivel-colocar-pessoa-na-fila (:tipo (ex-data e))))))
-
-    (is (= {:hospital {:espera [1 35 42 64 21]}, :resultado :impossivel-colocar-na-fila}
-           (chega-em {:espera [1 35 42 64 21]}, :espera 76)))))
+      (is (= {:hospital hospital-cheio, :resultado :impossivel-colocar-na-fila}
+             (chega-em hospital-cheio, :espera 76))))))
 
 
 
