@@ -55,3 +55,32 @@
 ; ou seja, manipular o resultado antes de fazer swap
 ; (defn chega-em! [hospital departamento pessoa]
 ;  (:hospital (chega-em hospital departamento pessoa)))
+
+
+; CÓDIGO DE UM CURSO ANTERIOR
+
+(defn chega-em
+  [hospital departamento pessoa]
+  (if (cabe-na-fila? hospital departamento)
+    (update hospital departamento conj pessoa)              ; atualiza o hospital, adiciona (conj) a pessoa no departamento (LaboratorioN)
+    (throw (ex-info "Fila já está cheia!" {:tentando-adicionar pessoa})))) ; lançando exception
+
+(defn atende
+  [hospital departamento]
+  "Remove o primeiro paciente da fila de um departamento"
+  (update hospital departamento pop))                       ; comportamento do pop depende da estrutura de dados (fila, vetor, lista)
+
+(defn proximo
+  [hospital departamento]
+  "Retorna o próximo (primeiro) paciente da fila de um departamento"
+  (-> hospital
+      departamento
+      peek))                                                ; comportamento do peek depende da estrutura de dados
+
+(defn transfere
+  [hospital departamento-origem departamento-destino]
+  "Remove o primeiro paciente da fila de espera e o adiciona na fila de um laboratório"
+  (let [pessoa (proximo hospital departamento-origem)]
+    (-> hospital
+        (atende departamento-origem)
+        (chega-em departamento-destino pessoa))))

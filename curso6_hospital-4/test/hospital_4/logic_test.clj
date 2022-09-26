@@ -1,6 +1,8 @@
 (ns hospital-4.logic-test
+  (:use clojure.pprint)
   (:require [clojure.test :refer :all]
-            [hospital-4.logic :refer :all])
+            [hospital-4.logic :refer :all]
+            [hospital-4.model :as h.model])
   (:import (clojure.lang ExceptionInfo)))                   ; :referir pelo nome, sem prefixo, tudo do clojure.test
 
 (deftest cabe-na-fila?-test                                 ; define símbolo
@@ -40,28 +42,28 @@
       #_(is (= (update {:espera [1, 2, 3, 4]} :espera conj 5)
                (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
 
-      #_(is (= {:espera [1, 2, 3, 4, 5]}
-               (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
-
-      ; FAZER TESTES NÃO SEQUENCIAIS!
-      #_(is (= {:espera [1, 2, 5]}
-               (chega-em {:espera [1, 2]}, :espera, 5)))
-
-      ;------------------------------
-      (is (= {:hospital {:espera [1 2 3 4 5]}, :resultado :sucesso}
+      (is (= {:espera [1, 2, 3, 4, 5]}
              (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
 
+      ; FAZER TESTES NÃO SEQUENCIAIS!
+      (is (= {:espera [1, 2, 5]}
+             (chega-em {:espera [1, 2]}, :espera, 5)))
 
-      (is (= {:hospital {:espera [1 2 5]}, :resultado :sucesso}
-             (chega-em {:espera [1, 2]}, :espera, 5))))
+      ;------------------------------
+      #_(is (= {:hospital {:espera [1 2 3 4 5]}, :resultado :sucesso}
+               (chega-em {:espera [1, 2, 3, 4]}, :espera, 5)))
+
+
+      #_(is (= {:hospital {:espera [1 2 5]}, :resultado :sucesso}
+               (chega-em {:espera [1, 2]}, :espera, 5))))
 
     (testing "não aceita quando a fila está cheia"
 
       ; Verificando que uma Exception foi lançada.
       ; Código clássico horrível com exception genérica, pois qualquer outro erro genérico lança essa mesma exception
       ; e nosso teste passaria e não verificaria.
-      #_(is (thrown? ExceptionInfo
-                     (chega-em hospital-cheio, :espera 76)))
+      (is (thrown? ExceptionInfo
+                   (chega-em hospital-cheio, :espera 76)))
 
       ; Mesmo escolhendo uma exception do gênero, é perigoso,
       ; pois algum caso inesperado pode resultar nesta mesma exception
@@ -87,9 +89,23 @@
               (catch ExceptionInfo e
                 (= :impossivel-colocar-pessoa-na-fila (:tipo (ex-data e))))))
 
-      (is (= {:hospital hospital-cheio, :resultado :impossivel-colocar-na-fila}
-             (chega-em hospital-cheio, :espera 76))))))
+      #_(is (= {:hospital hospital-cheio, :resultado :impossivel-colocar-na-fila}
+               (chega-em hospital-cheio, :espera 76))))))
 
 
+(deftest transfere-test
 
+  (testing "aceita pessoas se cabe"
+    (let [hospital-original {:espera [5], :raio-x []}]
+      (is (= {:espera [], :raio-x [5]}
+             (transfere hospital-original :espera :raio-x))))
 
+    (let [hospital-original {:espera (conj h.model/fila-vazia 51 5), :raio-x (conj h.model/fila-vazia 13)}]
+      (pprint (transfere hospital-original :espera :raio-x))
+      (is (= {:espera [5], :raio-x [13 51]}                 ; não compara o schema, mas sim o valor contido nas posições
+             (transfere hospital-original :espera :raio-x)))))
+
+  (testing "recusa pessoas se não cabe"
+    (let [hospital-cheio {:espera [5], :raio-x [1 2 53 42 13]}]
+      (is (thrown? clojure.lang.ExceptionInfo
+                   (transfere hospital-cheio :espera :raio-x))))))

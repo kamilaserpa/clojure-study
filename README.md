@@ -752,7 +752,7 @@ Define uma função de teste sem argumentos. É uma coleção de afirmações, [
 
 ### [Testing](https://clojuredocs.org/clojure.test/testing)
 
-[É uma macro para um conjunto de asserções (afirmações)](https://practical.li/clojure/testing/unit-testing/writing-unit-tests.html). Adiciona uma nova string à lista de contextos de teste. Pode ser aninhado, mas deve ocorrer dentro de uma função de teste (deftest).
+[Testing](https://practical.li/clojure/testing/unit-testing/writing-unit-tests.html) é uma macro para um conjunto de asserções (afirmações). Adiciona uma nova string à lista de contextos de teste. Pode ser aninhado, mas deve ocorrer dentro de uma função de teste (deftest).
 ```clojure
     (deftest alternate-use
              (testing "test a vector of `is`"
@@ -803,6 +803,10 @@ O mesmo que defn, produzindo def **não** público.
     
     (println (exercises/foo))                       ; IllegalStateException, var: #'hospital-4.exercises/foo is not public
 ```
+
+### [Ex-data](https://clojuredocs.org/clojure.core/ex-data)
+
+Retorna dados de uma exceção (um mapa) se ex for um IExceptionInfo. Caso contrário, retorna nil.
 
 
 ## Intellij IDE
