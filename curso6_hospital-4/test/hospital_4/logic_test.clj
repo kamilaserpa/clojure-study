@@ -106,10 +106,15 @@
 
     (let [hospital-original {:espera (conj h.model/fila-vazia "51" "5"), :raio-x (conj h.model/fila-vazia "13")}]
       (is (= {:espera ["5"]
-              :raio-x ["13" "51"]}                              ; não compara o schema, mas sim o valor contido nas posições
+              :raio-x ["13" "51"]}                          ; não compara o schema, mas sim o valor contido nas posições
              (transfere hospital-original :espera :raio-x)))))
 
   (testing "recusa pessoas se não cabe"
     (let [hospital-cheio {:espera (conj h.model/fila-vazia "5"), :raio-x (conj h.model/fila-vazia "1" "2" "53" "42" "13")}]
       (is (thrown? clojure.lang.ExceptionInfo
-                   (transfere hospital-cheio :espera :raio-x))))))
+                   (transfere hospital-cheio :espera :raio-x)))))
+
+  ; Inserir teste se isso for essencial para a funcionalidade e fgarantir que
+  ; no futuro, não será removida a validação pelo schema.
+  (testing "Não pode invocar transferência sem hospital"
+    (is (thrown? clojure.lang.ExceptionInfo (transfere nil :espera :raio-x)))))
