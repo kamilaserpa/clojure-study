@@ -2,8 +2,11 @@
   (:use clojure.pprint)
   (:require [clojure.test :refer :all]
             [hospital-4.logic :refer :all]
-            [hospital-4.model :as h.model])
+            [hospital-4.model :as h.model]
+            [schema.core :as s])
   (:import (clojure.lang ExceptionInfo)))                   ; :referir pelo nome, sem prefixo, tudo do clojure.test
+
+(s/set-fn-validation! true)
 
 (deftest cabe-na-fila?-test                                 ; define símbolo
 
@@ -96,16 +99,17 @@
 (deftest transfere-test
 
   (testing "aceita pessoas se cabe"
-    (let [hospital-original {:espera [5], :raio-x []}]
-      (is (= {:espera [], :raio-x [5]}
+    (let [hospital-original {:espera (conj h.model/fila-vazia "5"), :raio-x h.model/fila-vazia}]
+      (is (= {:espera []
+              :raio-x ["5"]}
              (transfere hospital-original :espera :raio-x))))
 
-    (let [hospital-original {:espera (conj h.model/fila-vazia 51 5), :raio-x (conj h.model/fila-vazia 13)}]
-      (pprint (transfere hospital-original :espera :raio-x))
-      (is (= {:espera [5], :raio-x [13 51]}                 ; não compara o schema, mas sim o valor contido nas posições
+    (let [hospital-original {:espera (conj h.model/fila-vazia "51" "5"), :raio-x (conj h.model/fila-vazia "13")}]
+      (is (= {:espera ["5"]
+              :raio-x ["13" "51"]}                              ; não compara o schema, mas sim o valor contido nas posições
              (transfere hospital-original :espera :raio-x)))))
 
   (testing "recusa pessoas se não cabe"
-    (let [hospital-cheio {:espera [5], :raio-x [1 2 53 42 13]}]
+    (let [hospital-cheio {:espera (conj h.model/fila-vazia "5"), :raio-x (conj h.model/fila-vazia "1" "2" "53" "42" "13")}]
       (is (thrown? clojure.lang.ExceptionInfo
                    (transfere hospital-cheio :espera :raio-x))))))

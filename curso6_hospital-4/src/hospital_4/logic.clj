@@ -1,4 +1,6 @@
-(ns hospital-4.logic)
+(ns hospital-4.logic
+  (:require [hospital-4.model :as h.model]
+            [schema.core :as s]))
 
 ; WHEN-LET
 ; Vantagem, funciona para o caso de departamento não existente no hospital,
@@ -45,10 +47,10 @@
   (if (cabe-na-fila? hospital departamento)
     (update hospital departamento conj pessoa)))
 
-(defn chega-em [hospital departamento pessoa]
-  (if-let [novo-hospital (tenta-colocar-na-fila hospital departamento pessoa)]
-    {:hospital novo-hospital, :resultado :sucesso}
-    {:hospital hospital, :resultado :impossivel-colocar-na-fila})) ; retorna o hospital como estava antes
+#_(defn chega-em [hospital departamento pessoa]
+    (if-let [novo-hospital (tenta-colocar-na-fila hospital departamento pessoa)]
+      {:hospital novo-hospital, :resultado :sucesso}
+      {:hospital hospital, :resultado :impossivel-colocar-na-fila})) ; retorna o hospital como estava antes
 
 ; Com a abordagem de retornar o hospital e o status de resultado, teria de haver outra função
 ; para tratar e capturar o conteúdo do novo hospital, ou tratativa caso não seja possível adicionar uma pessoa,
@@ -65,21 +67,21 @@
     (update hospital departamento conj pessoa)              ; atualiza o hospital, adiciona (conj) a pessoa no departamento (LaboratorioN)
     (throw (ex-info "Fila já está cheia!" {:tentando-adicionar pessoa})))) ; lançando exception
 
-(defn atende
-  [hospital departamento]
+(s/defn atende :- h.model/Hospital
   "Remove o primeiro paciente da fila de um departamento"
+  [hospital :- h.model/Hospital, departamento :- s/Keyword]
   (update hospital departamento pop))                       ; comportamento do pop depende da estrutura de dados (fila, vetor, lista)
 
-(defn proximo
-  [hospital departamento]
+(s/defn proximo :- h.model/PacienteID
   "Retorna o próximo (primeiro) paciente da fila de um departamento"
+  [hospital :- h.model/Hospital, departamento :- s/Keyword]
   (-> hospital
       departamento
       peek))                                                ; comportamento do peek depende da estrutura de dados
 
-(defn transfere
-  [hospital departamento-origem departamento-destino]
+(s/defn transfere :- h.model/Hospital
   "Remove o primeiro paciente da fila de espera e o adiciona na fila de um laboratório"
+  [hospital :- h.model/Hospital, departamento-origem :- s/Keyword, departamento-destino :- s/Keyword]
   (let [pessoa (proximo hospital departamento-origem)]
     (-> hospital
         (atende departamento-origem)
