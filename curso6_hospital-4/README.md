@@ -115,3 +115,15 @@ O mesmo que defn, produzindo def **não** público.
 ### [Ex-data](https://clojuredocs.org/clojure.core/ex-data)
 
 Retorna dados de uma exceção (um mapa) se ex for um IExceptionInfo. Caso contrário, retorna nil.
+
+### Assert
+`:pre` é uma [assertion](https://clojuredocs.org/clojure.core/*assert*), um vetor que lança AssertionError caso false. É uam asserçõ pcional em tempo de execução, pode ser desativado em execução.
+
+```clojure
+    (set! *assert* true)
+    (defn str->int
+        [x]
+        {:pre  [(string? x)]}
+        (Integer/valueOf x))
+    (str->int 12.2)  ;;=> AssertionError Assert failed: (string? x)  user/str->int.
+```

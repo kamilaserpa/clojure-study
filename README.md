@@ -808,6 +808,17 @@ O mesmo que defn, produzindo def **não** público.
 
 Retorna dados de uma exceção (um mapa) se ex for um IExceptionInfo. Caso contrário, retorna nil.
 
+### Assert
+`:pre` é uma [assertion](https://clojuredocs.org/clojure.core/*assert*), um vetor que lança AssertionError caso false. É uam asserçõ pcional em tempo de execução, pode ser desativado em execução.
+
+```clojure
+    (set! *assert* true)
+    (defn str->int
+        [x]
+        {:pre  [(string? x)]}
+        (Integer/valueOf x))
+    (str->int 12.2)  ;;=> AssertionError Assert failed: (string? x)  user/str->int.
+```
 
 ## Intellij IDE
 Adicionar o plugin "Cursive".
@@ -823,6 +834,7 @@ Alguns atalhos:
  - Cmd + Backspace remove toda a linha
  - Alt + Shift + Up/Down move uma linha
  - Para realizar o download de uma dependência acesse a barra lateral direita "Leiningen" e clique em "Refresh Leiningen Projects"
+ - Cmd + Option + <- - Retorna para o último ponto do código acessado
 
 Para executar testes no REPL acessamos Tool na barra superior, REPL, Run testes in Current NS in REPL. Para criar um atalho acessamos Preferências, Keymap, buscamos por "REPL", executamos duplo clique em "Run testes in Current NS in REPL" e criamos o atalho: 
 `Command + Ctrl + T`.
