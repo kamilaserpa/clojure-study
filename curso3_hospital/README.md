@@ -194,3 +194,5 @@ Define o valor-em-transacao de ref para `(apply fn valor-em-transacao args)` e r
 ### [Ensure](https://clojuredocs.org/clojure.core/ensure)
 Ensure somente garante que o valor não foi alterado durante a transação.
 Imagina uma situação onde você precisa garantir que algo não foi alterado em um valor para que a transação ocorra, um ensure é a forma de garantir somente isso.
+
+## [Certificado](/certificados/Certificado-clojure-3-alura.pdf)

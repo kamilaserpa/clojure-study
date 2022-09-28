@@ -79,10 +79,19 @@
       departamento
       peek))                                                ; comportamento do peek depende da estrutura de dados
 
+; Função de pós condição extraída possibilitando ser testada individualmente
+(defn mesmo-tamanho?
+  [hospital, outro-hospital, departamento-origem, departamento-destino]
+  (= (+ (count (get outro-hospital departamento-origem)) (count (get outro-hospital departamento-destino)))
+     (+ (count (get hospital departamento-origem)) (count (get hospital departamento-destino)))))
+
 (s/defn transfere :- h.model/Hospital
   "Remove o primeiro paciente da fila de espera e o adiciona na fila de um laboratório"
   [hospital :- h.model/Hospital, departamento-origem :- s/Keyword, departamento-destino :- s/Keyword]
-  {:pre [(contains? hospital departamento-origem), (contains? hospital departamento-destino)]} ; AssertionError caso false, opcional em tempo de execução, pode ser desligado em execução
+  {
+   :pre  [(contains? hospital departamento-origem), (contains? hospital departamento-destino)] ; AssertionError caso false, opcional em tempo de execução, pode ser desligado em execução
+   :post [(mesmo-tamanho? hospital % departamento-origem departamento-destino)]}
+
   (let [pessoa (proximo hospital departamento-origem)]
     (-> hospital
         (atende departamento-origem)

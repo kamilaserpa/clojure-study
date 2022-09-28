@@ -118,3 +118,14 @@ Keyworks por padrão determinam schemas obrigatórios, `required-key`.
     
     (s/validate Paciente {:id 15, :nome "Guilherme"})  ; Exception pois não possui a keywork 'plano'
 ```
+
+## [Certificado](/certificados/Certificado-clojure-5-alura.pdf)
+
+<object data="/certificados/Certificado-clojure-5-alura.pdf" width="700px" height="700px">
+    <embed src="/certificados/Certificado-clojure-5-alura.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="/certificados/Certificado-clojure-5-alura.pdf">Download PDF</a>.</p>
+    </embed>
+</object>
+
+<iframe width="100%" height="400" src="/certificados/Certificado-clojure-5-alura.pdf"></iframe>
+

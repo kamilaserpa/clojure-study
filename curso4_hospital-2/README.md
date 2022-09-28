@@ -107,3 +107,5 @@ Se um teste retornar true, `cond` avalia e retorna o valor da expr correspondent
     (pos-neg-or-zero -1) ; "negative"
     (pos-neg-or-zero 0) ; "zero"
 ```
+
+## [Certificado](/certificados/Certificado-clojure-4-alura.pdf)

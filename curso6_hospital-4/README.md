@@ -116,14 +116,23 @@ O mesmo que defn, produzindo def **não** público.
 
 Retorna dados de uma exceção (um mapa) se ex for um IExceptionInfo. Caso contrário, retorna nil.
 
-### Assert
-`:pre` é uma [assertion](https://clojuredocs.org/clojure.core/*assert*), um vetor que lança AssertionError caso false. É uam asserçõ pcional em tempo de execução, pode ser desativado em execução.
+### Assert, pré e pós condições
+
+[Pré e post conditions](https://clojure.org/reference/special_forms#_fn_name_param_condition_map_expr) são representadas por `:pre` e `:post` no parâmetro `conditions-map` de uma função, sendo que, se a única forma após o vetor de parâmetros for um mapa, ele será tratado como corpo e não como mapa de condição.
+
+`pre-expr` e `post-expr` são expressões booleanas ([assertions](https://clojuredocs.org/clojure.core/*assert*)), um vetor que lança AssertionError caso false, `%` pode ser usado para se referir ao retorno da função em um `post-expr`. É uma asserção opcional em tempo de execução, pode ser desativado em execução.
 
 ```clojure
     (set! *assert* true)
     (defn str->int
-        [x]
-        {:pre  [(string? x)]}
-        (Integer/valueOf x))
-    (str->int 12.2)  ;;=> AssertionError Assert failed: (string? x)  user/str->int.
+      [x]
+      {:pre  [(string? x)]                     ; Verifica se recebeu uma string
+       :post [(and (int? %) (< % 100))]}       ; Verifica se está retornando um inteiro menor que 100
+      (Integer/valueOf x))
+    
+    (str->int "23")
+    (str->int "102")                           ; (AssertionError) Assert failed: (and (int? %) (< % 100))
+    (str->int 12.2)                            ; (AssertionError) Assert failed: (string? x)
 ```
+
+[Certificado](https://cursos.alura.com.br/certificate/kamila-serpa/clojure-explorando-testes)

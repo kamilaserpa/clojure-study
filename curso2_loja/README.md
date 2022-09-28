@@ -161,4 +161,4 @@ No caso de funções com efeito colateral, não é interessante mesclarmos lazy 
 Para grupos grandes e finitos, é interessante utilizarmos o processo lazy.
 Precisamos sempre pensar se faz sentido otimizar o programa por essa via, e muitas vezes não será, pois nem sempre trabalhamos com vetores e listas de um milhão de elementos, por exemplo.
 
-[Certificado](https://cursos.alura.com.br/certificate/kamila-serpa/clojure-colecoes-no-dia-a-dia)
+## [Certificado](https://cursos.alura.com.br/certificate/kamila-serpa/clojure-colecoes-no-dia-a-dia)
