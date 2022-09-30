@@ -13,6 +13,10 @@
   (testing "Que cabe numa fila vazia"
     (is (cabe-na-fila? {:espera []} :espera)))
 
+  (testing "Que cabe pessoas em filas de tamanho até 4 inclusive"
+    (doseq [fila (gen/sample (gen/vector gen/string-alphanumeric 0 4))] ; vetor com tamanho entre 0 e 4, gera 10 vetores
+      (is (cabe-na-fila? {:espera fila} :espera))))         ; doseq, executa esta linha para cada item do vetor fila, um por vez
+
   ; Borda do limite
   (testing "Que não cabe na fila quando a fila está cheia"
     (is (not (cabe-na-fila? {:espera [1 2 3 4 5]}, :espera))))

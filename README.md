@@ -860,7 +860,22 @@ Alguns atalhos:
  - Para realizar o download de uma dependência acesse a barra lateral direita "Leiningen" e clique em "Refresh Leiningen Projects"
  - Cmd + Option + <- - Retorna para o último ponto do código acessado
 
+### Testes
+
 Para executar testes no REPL acessamos Tool na barra superior, REPL, Run testes in Current NS in REPL. Para criar um atalho acessamos Preferências, Keymap, buscamos por "REPL", executamos duplo clique em "Run testes in Current NS in REPL" e criamos o atalho: 
 `Command + Ctrl + T`.
 
 ![Print Preferences Intellij](./atalho_teste.png)
+
+Outra forma é adicionar um REPL command e dar um shortcut para ele, clicando com o lado direito do mouse em um arquivo de teste, selecione REPL, "Add new REPL Command",
+nomeie-o, selecione "Execute command", preencha o campo com o comando abaixo:
+
+ - Nome "Run single test (cursor)", comando:
+ (clojure.test/test-vars [#'~current-test-var])
+
+ - Nome "Run all tests in current namespace", comando:
+ (clojure.test/run-tests '~file-namespace) 
+
+ - Retirar simbolo do namespace:
+ (ns-unmap '~file-namespace '~selection). Isso é bom quandp altera o nome do defflow ou do deftest e fica um zombie lá. Obs: seleciona o nome que quer remover e execute este comando.
+
