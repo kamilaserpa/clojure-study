@@ -46,9 +46,13 @@
         (is (= 1 1)))))                                     ; para exibir quantidade de casos no resultado do teste
 
 
-(defspec explorando-a-api 10                                ; número de testes gerados = 10
+; O teste funciona , mas parece muito uma cópia do nosso código implementado.
+; Significa que se eu coloquei um bug no código, provavelmente coloquei aqui tbm, e os testes vão passar
+; Não realizamos um teste útil, outra abordagem
+(defspec coloca-uma-pessoa-em-filas-menores-que-5 10        ; número de testes gerados = 10
   (prop/for-all
     [fila (gen/vector gen/string-alphanumeric 0 4)
      pessoa gen/string-alphanumeric]
-    (print pessoa fila)                                     ; printa apenas 10 coimbinações
-    true))
+    (println pessoa fila)                                   ; printa apenas 10 coimbinações
+    (is (= {:espera (conj fila pessoa)}                     ; deve retornar o mesmo hospital com a pessoa na fila
+           (chega-em {:espera fila} :espera pessoa)))))
