@@ -51,3 +51,6 @@
     (-> hospital
         (atende departamento-origem)
         (chega-em departamento-destino pessoa))))
+
+(defn total-de-pacientes [hospital]
+  (reduce + (map count (vals hospital))))

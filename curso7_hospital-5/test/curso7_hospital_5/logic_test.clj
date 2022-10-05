@@ -5,7 +5,8 @@
             [schema.core :as s]
             [clojure.test.check.clojure-test :refer (defspec)]
             [clojure.test.check.properties :as prop]
-            [clojure.test.check.generators :as gen]))
+            [clojure.test.check.generators :as gen]
+            [curso7-hospital-5.model :as h.model]))
 
 (s/set-fn-validation! true)
 
@@ -51,8 +52,32 @@
 ; Não realizamos um teste útil, outra abordagem
 (defspec coloca-uma-pessoa-em-filas-menores-que-5 10        ; número de testes gerados = 10
   (prop/for-all
-    [fila (gen/vector gen/string-alphanumeric 0 4)
+    [fila (gen/vector gen/string-alphanumeric 0 4)          ;vetor alfanumerico de 0 a 4 pessoas
      pessoa gen/string-alphanumeric]
-    (println pessoa fila)                                   ; printa apenas 10 coimbinações
+    ;(println pessoa fila)                                   ; printa apenas 10 coimbinações
     (is (= {:espera (conj fila pessoa)}                     ; deve retornar o mesmo hospital com a pessoa na fila
            (chega-em {:espera fila} :espera pessoa)))))
+
+(def nome-aleatorio
+  (gen/fmap                                                 ; aplica essa função (clj.string/join) a cada um dos itens gerados
+    clojure.string/join                                     ; une o vetor de letras (5 a 10) em uma string
+    (gen/vector gen/char-alphanumeric 5 10)))               ; cria vetor de 5 a 10 caracteres alfanuméricos
+
+(defn transforma-vetor-em-fila [vetor]
+  (reduce conj h.model/fila-vazia vetor))                   ; conj adiciona na fila-vazia o primeiro elemento do vetor, em seguida reduce com o segundo elemento
+
+(def fila-nao-cheia-gen
+  (gen/fmap
+    transforma-vetor-em-fila
+    (gen/vector nome-aleatorio 0 4)))
+
+(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 1
+  (prop/for-all
+    [espera fila-nao-cheia-gen                              ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
+     raio-x fila-nao-cheia-gen
+     ultrassom fila-nao-cheia-gen
+     vai-para (gen/elements [:raio-x :ultrassom])]
+    (let [hospital-inicial {:espera espera, :raio-x raio-x, :ultrassom ultrassom}
+          hospital-final (transfere hospital-inicial :espera vai-para)]
+      (= (total-de-pacientes hospital-inicial)
+         (total-de-pacientes hospital-final)))))

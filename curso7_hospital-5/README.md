@@ -40,3 +40,16 @@ No exemplo abaixo a propriedade gera um vetor e então chama a função que est�
         (= (sort v) (sort (sort v)))))
 ```
 
+### Property based testing
+
+No post [In praise of property-based testing](https://increment.com/testing/in-praise-of-property-based-testing/), David Maciver cita testes de propriedade, em um contexto que envolve uma senha a ser criptografada. Há uma biblioteca que faz isto, por meio da criação de hashes. Então, são testados um valor, e as combinações de parâmetros são setadas, trabalhando-se com inteiros (integers) e um texto (text), que é a senha em si (password).
+
+Feito o teste, ele descobre um bug. O teste implica na senha criptografada ser exatamente a mesma que de fato deveria ser criptografada, mas se testássemos isso, cairíamos naquela situação de duplicação de códigos, e então não descobriríamos nenhum bug. Se é um criptografador de senhas que possui ida e volta, é possível testar que, tendo ambos, precisaremos voltar para o mesmo lugar de início.
+
+Isto é, não testamos se o nosso código de ida faz exatamente o que deveria fazer, e sim que, se fizermos a ida, e depois a volta, esta precisa chegar ao mesmo lugar. Estaremos, assim, testando uma propriedade deste algoritmo de criptografia. Ou, se tivermos a mesma senha várias vezes, ela precisará ser criptografada por um mesmo valor, o que seria uma outra abordagem, sem volta, apenas ida.
+
+Não importa quantas vezes criptografemos a senha, o resultado tem que ser o mesmo, não importa se a criptografia estiver sendo feita em paralelo, se utilizamos mais ou menos memória, idem. Este é um exemplo de teste de propriedade de algoritmo. Não estamos testando o resultado, e sim que ele será o mesmo todas as vezes em que realizarmos o teste.
+
+Outro bom exemplo dado pelo autor do post é o de formatação de datas, análogo ao exemplo citado da criptografia. Se utilizarmos uma data de padrão brasileiro, "18/09/1981", passarmos à formatação americana, "09/18/1981", quando retornarmos ao padrão brasileiro, a data precisa ser a mesma, caso contrário, trata-se de um bug. Trabalhamos com uma propriedade do código, e não o código em si.
+
+ Seriam exemplos de propriedades da transferência de pacientes do hospital, o total de pessoas no hospital antes da transferência deve ser igual ao total de pessoas no hospital após a transferência de pessoas entre departamentos.
