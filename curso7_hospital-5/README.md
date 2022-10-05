@@ -16,6 +16,32 @@ A função [`gen/sample`](https://clojure.org/guides/test_check_beginner#_develo
   (gen/sample (gen/vector gen/small-integer 12) 5)    ; retorna 5 vetores de inteiros, com tamanho até 12 dígitos
   (gen/sample (gen/vector gen/small-integer 1 5) 10)   ; retorna 10 vetores de inteiros, com tamanho de 1 a 5
 ```
+#### [gen/sample](https://clojure.github.io/test.check/clojure.test.check.generators.html#var-sample)
+
+```clojure
+  (sample generator)
+  (sample generator num-samples)
+```
+
+Gera vetores, recebendo como parâmetro uma geradora de valores. "Num-samples" é o número de valores gerados, por padrão são 10. A sequência começa com pequenos valores do gerador.
+
+#### [gen/fmap](https://clojure.github.io/test.check/clojure.test.check.generators.html#var-fmap)
+Retorna um gerador como `gen` mas com valores transformados por `f`: `(fmap f gen)`
+
+```clojure
+    (gen/sample (gen/fmap str gen/nat)) 
+    ; ("0" "1" "0" "1" "4" "3" "6" "6" "4" "2") 
+    ; transforma cada um dos numeros naturais gerados pelo gen/nat em string
+```
+
+#### [gen/elements]()
+Cria um gerador que escolhe aleatoriamente um elemento de `coll`: `(elements coll)`.
+
+```clojure
+    (gen/sample (gen/elements [:foo :bar :baz]))
+    ; (:foo :baz :baz :bar :foo :foo :bar :bar :foo :bar)
+    ; gera 10 'samples' com um dos elementos (foo, bar, baz) escolhidos aleatoriamente
+```
 
 ### [Defspec](https://clojure.org/guides/test_check_beginner#_defspec)
 

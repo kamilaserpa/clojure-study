@@ -6,7 +6,8 @@
             [clojure.test.check.clojure-test :refer (defspec)]
             [clojure.test.check.properties :as prop]
             [clojure.test.check.generators :as gen]
-            [curso7-hospital-5.model :as h.model]))
+            [curso7-hospital-5.model :as h.model])
+  (:import (clojure.lang ExceptionInfo)))
 
 (s/set-fn-validation! true)
 
@@ -71,13 +72,22 @@
     transforma-vetor-em-fila
     (gen/vector nome-aleatorio 0 4)))
 
-(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 1
+; Para teste de propriedade (ex quantidade de pessoas no HOSPITAL continua a mesma após o transfere?)
+(defn transfere-ignorando-erro
+  [hospital de para]
+  (try
+    (transfere hospital de para)
+    (catch ExceptionInfo e
+      (println "Não funcionou")
+      hospital)))
+
+(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 5
   (prop/for-all
     [espera fila-nao-cheia-gen                              ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
      raio-x fila-nao-cheia-gen
      ultrassom fila-nao-cheia-gen
      vai-para (gen/elements [:raio-x :ultrassom])]
     (let [hospital-inicial {:espera espera, :raio-x raio-x, :ultrassom ultrassom}
-          hospital-final (transfere hospital-inicial :espera vai-para)]
+          hospital-final (transfere-ignorando-erro hospital-inicial :espera vai-para)]
       (= (total-de-pacientes hospital-inicial)
          (total-de-pacientes hospital-final)))))
