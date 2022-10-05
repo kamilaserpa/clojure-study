@@ -3,6 +3,8 @@
   (:require [clojure.test :refer :all]
             [curso7-hospital-5.logic :refer :all]
             [schema.core :as s]
+            [clojure.test.check.clojure-test :refer (defspec)]
+            [clojure.test.check.properties :as prop]
             [clojure.test.check.generators :as gen]))
 
 (s/set-fn-validation! true)
@@ -15,7 +17,7 @@
 
   (testing "Que cabe pessoas em filas de tamanho até 4 inclusive"
     (doseq [fila (gen/sample (gen/vector gen/string-alphanumeric 0 4))] ; vetor com tamanho entre 0 e 4, gera 10 vetores
-      (is (cabe-na-fila? {:espera fila} :espera))))         ; doseq, executa esta linha para cada item do vetor fila, um por vez
+      (is (cabe-na-fila? {:espera fila} :espera))))         ; doseq, executa esta linha para cada item do vetor fila, cruza os dados, um por vez
 
   ; Borda do limite
   (testing "Que não cabe na fila quando a fila está cheia"
@@ -33,3 +35,20 @@
   (testing "Que não cabe quando departamento não existe"
     ; hospital possui departamento 'espera' apenas
     (is (not (cabe-na-fila? {:espera [1 2 3 4]}, :raio-x)))))
+
+#_(deftest chega-em-test
+    ; doseq gera uma multiplicação de casos (com valores cruzados), incluindo muitos casos repetidos
+    ; nesse caso 10 x 5 = 50 asserts
+    (testing "Que é colocada uma pessoa em filas menores que 5"
+      (doseq [fila (gen/sample (gen/vector gen/string-alphanumeric 0 4) 10)
+              pessoa (gen/sample gen/string-alphanumeric 5)]
+        (println pessoa fila)
+        (is (= 1 1)))))                                     ; para exibir quantidade de casos no resultado do teste
+
+
+(defspec explorando-a-api 10                                ; número de testes gerados = 10
+  (prop/for-all
+    [fila (gen/vector gen/string-alphanumeric 0 4)
+     pessoa gen/string-alphanumeric]
+    (print pessoa fila)                                     ; printa apenas 10 coimbinações
+    true))
