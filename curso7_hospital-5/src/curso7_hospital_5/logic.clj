@@ -19,7 +19,9 @@
   [hospital departamento pessoa]
   (if (cabe-na-fila? hospital departamento)
     (update hospital departamento conj pessoa)
-    (throw (ex-info "Fila já está cheia!" {:tentando-adicionar pessoa}))))
+    (throw (java.lang.IllegalStateException. "Não cabe ninguém neste departamento"))))
+
+; (throw (ex-info "Fila já está cheia!" {:type :fila-cheia :tentando-adicionar pessoa}))))
 
 (s/defn atende :- h.model/Hospital
   "Remove o primeiro paciente da fila de um departamento"

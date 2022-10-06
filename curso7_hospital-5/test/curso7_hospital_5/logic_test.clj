@@ -73,17 +73,34 @@
     (gen/vector nome-aleatorio 0 4)))
 
 ; Para teste de propriedade (ex quantidade de pessoas no HOSPITAL continua a mesma após o transfere?)
-(defn transfere-ignorando-erro
-  [hospital para]
+; Abordagem razoável porém não agradável, pois usamos o tipo da exceptionm
+; e o tipo do tipo para fazer um condiciontal para só então verificar a exception que desejamos
+; LOG AND RETHROW é muito ruim, mascara o local e não trata, por que capturar uma exception se sabia que não iria tratar?
+; porque a linguagem nos forçou a verificar ExceptionInfo
+#_(defn transfere-ignorando-erro
+    [hospital para]
+    (try
+      (transfere hospital :espera para)
+      (catch ExceptionInfo e
+        (cond
+          (= :fila-cheia (:type (ex-data e))) hospital      ; caso tipo :fila-cheia retorna hospital
+          :else (throw e)))))                               ; caso contrário aconteceu uma exception inesperada
+
+; Abordagem mais interessante, pois evita Log and Rethrow
+; mas perde a capacidade de ex-info (ExceltionInfo, passar dados)
+; e ainda há o problema de outras pessoas lançarem IllegalStateException em outras partes do código
+; Podemos criar exception específicas, porém pode haver um "boom" de exceptions no sistema
+; ou criar variações de tipo como realizado no ex-info
+(defn transfere-ignorando-erro [hospital para]
   (try
     (transfere hospital :espera para)
-    (catch ExceptionInfo e
-      (println "Não funcionou:" e)
+    (catch IllegalStateException e
       hospital)))
 
 (defspec transfere-tem-que-manter-a-quantidade-de-pessoas 1
   (prop/for-all
-    [espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio 0 50)) ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
+    [espera gen/char-alphanumeric
+     ;espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio 0 50)) ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
      raio-x fila-nao-cheia-gen
      ultrassom fila-nao-cheia-gen
      vai-para (gen/vector (gen/elements [:raio-x :ultrassom]) 0 50)]
