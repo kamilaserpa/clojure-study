@@ -74,20 +74,23 @@
 
 ; Para teste de propriedade (ex quantidade de pessoas no HOSPITAL continua a mesma após o transfere?)
 (defn transfere-ignorando-erro
-  [hospital de para]
+  [hospital para]
   (try
-    (transfere hospital de para)
+    (transfere hospital :espera para)
     (catch ExceptionInfo e
-      (println "Não funcionou")
+      (println "Não funcionou:" e)
       hospital)))
 
-(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 5
+(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 1
   (prop/for-all
-    [espera fila-nao-cheia-gen                              ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
+    [espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio 0 50)) ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
      raio-x fila-nao-cheia-gen
      ultrassom fila-nao-cheia-gen
-     vai-para (gen/elements [:raio-x :ultrassom])]
+     vai-para (gen/vector (gen/elements [:raio-x :ultrassom]) 0 50)]
+    ; Ocorre erro porque as pessoas são transferidas e a fila de espera fica vazia, caso de erro
+    ; (println "espera:" (count espera) "vai-para:" (count vai-para) vai-para)
     (let [hospital-inicial {:espera espera, :raio-x raio-x, :ultrassom ultrassom}
-          hospital-final (transfere-ignorando-erro hospital-inicial :espera vai-para)]
+          hospital-final (reduce transfere-ignorando-erro hospital-inicial vai-para)]
+      ;(println (count (get hospital-final :raio-x)))
       (= (total-de-pacientes hospital-inicial)
          (total-de-pacientes hospital-final)))))
