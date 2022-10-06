@@ -97,17 +97,28 @@
     (catch IllegalStateException e
       hospital)))
 
-(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 1
+#_(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 50
+    (prop/for-all
+      [;espera gen/char-alphanumeric ; caso de erro de schema
+       espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio 0 50)) ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
+       raio-x fila-nao-cheia-gen
+       ultrassom fila-nao-cheia-gen
+       vai-para (gen/vector (gen/elements [:raio-x :ultrassom]) 0 50)]
+      ; Ocorre erro porque as pessoas são transferidas e a fila de espera fica vazia, caso de erro
+      ; (println "espera:" (count espera) "vai-para:" (count vai-para) vai-para)
+      (let [hospital-inicial {:espera espera, :raio-x raio-x, :ultrassom ultrassom}
+            hospital-final (reduce transfere-ignorando-erro hospital-inicial vai-para)]
+        ;(println (count (get hospital-final :raio-x)))
+        (= (total-de-pacientes hospital-inicial)
+           (total-de-pacientes hospital-final)))))
+
+(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 50
   (prop/for-all
-    [espera gen/char-alphanumeric
-     ;espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio 0 50)) ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
+    [espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio 0 50)) ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
      raio-x fila-nao-cheia-gen
      ultrassom fila-nao-cheia-gen
      vai-para (gen/vector (gen/elements [:raio-x :ultrassom]) 0 50)]
-    ; Ocorre erro porque as pessoas são transferidas e a fila de espera fica vazia, caso de erro
-    ; (println "espera:" (count espera) "vai-para:" (count vai-para) vai-para)
     (let [hospital-inicial {:espera espera, :raio-x raio-x, :ultrassom ultrassom}
           hospital-final (reduce transfere-ignorando-erro hospital-inicial vai-para)]
-      ;(println (count (get hospital-final :raio-x)))
       (= (total-de-pacientes hospital-inicial)
          (total-de-pacientes hospital-final)))))

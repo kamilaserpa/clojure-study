@@ -692,6 +692,10 @@ Keyworks por padrão determinam schemas obrigatórios, `required-key`.
     (s/validate Paciente {:id 15, :nome "Guilherme"})  ; Exception pois não possui a keywork 'plano'
 ```
 
+#### [s/maybe](https://plumatic.github.io/schema/schema.core.html#var-maybe)
+
+Indica que um valor pode ser nulo ou satisfazer o schema: `(maybe schema)`
+
 ## [Curso 6](curso6_hospital-4) - Clojure: explorando testes
 
 ### [Is](https://clojuredocs.org/clojure.test/is)

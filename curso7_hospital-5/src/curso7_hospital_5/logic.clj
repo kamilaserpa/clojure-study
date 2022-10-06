@@ -28,7 +28,7 @@
   [hospital :- h.model/Hospital, departamento :- s/Keyword]
   (update hospital departamento pop))
 
-(s/defn proximo :- h.model/PacienteID
+(s/defn proximo :- (s/maybe h.model/PacienteID) ; talvez retorne nulo, escolha de Regra de Negócio
   "Retorna o próximo (primeiro) paciente da fila de um departamento"
   [hospital :- h.model/Hospital, departamento :- s/Keyword]
   (-> hospital
@@ -49,10 +49,12 @@
    :pre  [(contains? hospital departamento-origem), (contains? hospital departamento-destino)] ; AssertionError caso false, opcional em tempo de execução, pode ser desligado em execução
    :post [(mesmo-tamanho? hospital % departamento-origem departamento-destino)]}
 
-  (let [pessoa (proximo hospital departamento-origem)]
+  (if-let [pessoa (proximo hospital departamento-origem)]
     (-> hospital
         (atende departamento-origem)
-        (chega-em departamento-destino pessoa))))
+        (chega-em departamento-destino pessoa))
+    (do (println "Caiu em fila sem pessoas para transferir")
+        hospital)))
 
 (defn total-de-pacientes [hospital]
   (reduce + (map count (vals hospital))))
