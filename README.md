@@ -864,13 +864,60 @@ Retorna um gerador como `gen` mas com valores transformados por `f`: `(fmap f ge
     ; transforma cada um dos numeros naturais gerados pelo gen/nat em string
 ```
 
-#### [gen/elements]()
+#### [gen/elements](https://clojure.github.io/test.check/clojure.test.check.generators.html#var-elements)
 Cria um gerador que escolhe aleatoriamente um elemento de `coll`: `(elements coll)`.
 
 ```clojure
     (gen/sample (gen/elements [:foo :bar :baz]))
     ; (:foo :baz :baz :bar :foo :foo :bar :bar :foo :bar)
     ; gera 10 'samples' com um dos elementos (foo, bar, baz) escolhidos aleatoriamente
+```
+
+#### [gen/tuple](https://clojure.github.io/test.check/clojure.test.check.generators.html#var-tuple)
+Cria um gerador que retorna um vetor, cujos elementos são criados pelos geradores na posição respectiva. Os elementos individuais encolhem de acordo com seu gerador, mas o vetor nunca diminuirá em contagem.
+
+```clojure
+    (s/def t (gen/tuple gen/nat gen/boolean))
+    (gen/sample t)
+    ;; => ([0 false] [0 true] [2 false] [1 true] [0 false] [5 false] [5 false] [0 true] [0 true] [5 true])
+    
+    (gen/sample (gen/tuple gen/small-integer gen/boolean))
+    ; ([0 true] [0 false] [0 false] [-2 true] [-1 true] [-2 true] 
+    ; [5 true] [-2 false] [-1 false] [1 false])
+```
+
+#### [gen/not-empty](https://clojure.github.io/test.check/clojure.test.check.generators.html#var-not-empty)
+
+Modifica um gerador para que não gere coleções vazias.
+```clojure
+    ;; generate a vector of booleans, but never the empty vector
+    ; Gera 4 vetores preenchidos com 2 strings alfanuméricas
+    (gen/sample (gen/not-empty (gen/vector gen/string-alphanumeric 2)) 4)
+    ; => (["" ""] ["" ""] ["8i" "l2"] ["f" "Q"])
+```
+
+### [Prismatic/Schema Generators](https://cljdoc.org/d/prismatic/schema-generators/0.1.3/api/schema-generators.generators)
+
+Schema Generators é uma biblioteca que fornece formas de geração automática de dados de teste a partir de schemas.
+
+```clojure
+    ; Amostra 3 itens do gerador
+    (g/sample 3 Animal)
+    ;; => ({:especie "", :idade 0}
+    ;; {:especie "", :idade 0}
+    ;; {:especie "T", :idade 1})
+    
+
+    ; Faz a amostragem de um único elemento de tamanho baixo a moderado.
+    (g/generate Arvore)
+    ;; => {:especie "l!uSc*<"}
+
+    ; Preenche com os dados passados, validados pelo schema, e gera amostra
+    (c/complete {:idade 6} Animal)
+    ;; => {:especie "WgJ$Ssm`71", :idade 6}
+    
+    (c/complete {:morde true} Animal)
+    ;; => #schema.utils.ErrorContainer{:error {:morde disallowed-key}}
 ```
 
 ### [Defspec](https://clojure.org/guides/test_check_beginner#_defspec)

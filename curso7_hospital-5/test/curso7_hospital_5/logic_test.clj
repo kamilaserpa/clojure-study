@@ -6,7 +6,8 @@
             [clojure.test.check.clojure-test :refer (defspec)]
             [clojure.test.check.properties :as prop]
             [clojure.test.check.generators :as gen]
-            [curso7-hospital-5.model :as h.model])
+            [curso7-hospital-5.model :as h.model]
+            [schema-generators.generators :as g])
   (:import (clojure.lang ExceptionInfo)))
 
 (s/set-fn-validation! true)
@@ -122,3 +123,22 @@
           hospital-final (reduce transfere-ignorando-erro hospital-inicial vai-para)]
       (= (total-de-pacientes hospital-inicial)
          (total-de-pacientes hospital-final)))))
+
+; Retorna um Hospital gerado
+(def hospital-gerado (g/generate h.model/Hospital))
+
+(defn adiciona-fila-de-espera [[hospital fila]]
+  (assoc hospital :espera fila))
+
+; Retorna um gerador de Hospitais
+(def hospital-gen
+  (gen/fmap
+    adiciona-fila-de-espera
+    (gen/tuple
+      (gen/not-empty (g/generator h.model/Hospital))
+      fila-nao-cheia-gen)))
+
+(defspec simula-um-dia-do-hospital-nao-perde-pessoas 10
+  (prop/for-all [hospital hospital-gen]                     ;  hospital recebe o valor do gerador
+    (pprint hospital)
+    (is (= 1 1))))

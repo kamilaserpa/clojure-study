@@ -5,5 +5,6 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [prismatic/schema "1.4.0"]
-                 [org.clojure/test.check "0.10.0"]]
+                 [org.clojure/test.check "0.10.0"]
+                 [prismatic/schema-generators "0.1.5"]]
   :repl-options {:init-ns curso7-hospital-5.core})
