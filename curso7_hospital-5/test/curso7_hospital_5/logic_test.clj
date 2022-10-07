@@ -142,13 +142,22 @@
   "Gerador de chegadas no hospital"
   (gen/tuple (gen/return chega-em), (gen/return :espera), nome-aleatorio-gen))
 
-(def transfere-gen
+(defn transfere-gen [hospital]
   "Gerador de transferências no hospital"
-  (gen/tuple (gen/return transfere), gen/keyword, gen/keyword))
+  (let [departamentos (keys hospital)]
+    (gen/tuple (gen/return transfere),
+               (gen/elements departamentos),                ; um dos elementos do hospital
+               (gen/elements departamentos))))              ; um dos elementos do hospital
+
+(defn acao-gen [hospital]
+  (gen/one-of [chega-em-gen (transfere-gen hospital)]))
+
+(defn acoes-gen [hospital]
+  (gen/not-empty (gen/vector (acao-gen hospital) 1 100)))
 
 (defspec simula-um-dia-do-hospital-nao-perde-pessoas 10
-  (prop/for-all [hospital hospital-gen
-                 acoes (gen/vector
-                         (gen/one-of [chega-em-gen transfere-gen]))] ; gere um destes
-    (pprint acoes)
-    (is (= 1 1))))
+  (prop/for-all
+    [hospital hospital-gen]                                 ; gere um destes
+    (let [acoes (gen/sample (acoes-gen hospital) 1)]
+      (pprint acoes)
+      (is (= 1 1)))))
