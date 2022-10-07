@@ -44,7 +44,9 @@
 
 (s/defn transfere :- h.model/Hospital
   "Remove o primeiro paciente da fila de espera e o adiciona na fila de um laboratório"
-  [hospital :- h.model/Hospital, departamento-origem :- s/Keyword, departamento-destino :- s/Keyword]
+  [hospital :- h.model/Hospital,
+   departamento-origem :- s/Keyword,
+   departamento-destino :- s/Keyword]
   {
    :pre  [(contains? hospital departamento-origem), (contains? hospital departamento-destino)] ; AssertionError caso false, opcional em tempo de execução, pode ser desligado em execução
    :post [(mesmo-tamanho? hospital % departamento-origem departamento-destino)]}

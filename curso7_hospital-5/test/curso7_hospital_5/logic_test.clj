@@ -95,7 +95,7 @@
 (defn transfere-ignorando-erro [hospital para]
   (try
     (transfere hospital :espera para)
-    (catch IllegalStateException e
+    (catch IllegalStateException _
       hospital)))
 
 #_(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 50
@@ -145,8 +145,8 @@
 (defn transfere-gen [hospital]
   "Gerador de transferências no hospital"
   (let [departamentos (keys hospital)]
-    (gen/tuple (gen/return transfere),
-               (gen/elements departamentos),                ; um dos elementos do hospital
+    (gen/tuple (gen/return transfere)
+               (gen/elements departamentos)                 ; um dos elementos do hospital
                (gen/elements departamentos))))              ; um dos elementos do hospital
 
 (defn acao-gen [hospital]
@@ -155,9 +155,20 @@
 (defn acoes-gen [hospital]
   (gen/not-empty (gen/vector (acao-gen hospital) 1 100)))
 
+(defn executa-uma-acao
+  [hospital [funcao param1 param2]]                         ; pois no caso do `transfere` é passada uma tupla com o a fn transfere, o departamento de origem e o departamento de destino
+  (try
+    (funcao hospital param1 param2)
+    (catch IllegalStateException _
+      hospital)))
+
 (defspec simula-um-dia-do-hospital-nao-perde-pessoas 10
   (prop/for-all
-    [hospital hospital-gen]                                 ; gere um destes
-    (let [acoes (gen/sample (acoes-gen hospital) 1)]
-      (pprint acoes)
-      (is (= 1 1)))))
+    [hospital-inicial hospital-gen]
+    (let [acoes (gen/generate (acoes-gen hospital-inicial))
+          total-de-pacientes-inicial (total-de-pacientes hospital-inicial)
+          hospital-final (reduce executa-uma-acao hospital-inicial acoes)
+          total-de-pacientes-final (total-de-pacientes hospital-final)]
+      (println "-> Totais:" total-de-pacientes-inicial total-de-pacientes-final)
+      ; final >= inicial pois estão chegando pessoas ou não
+      (is (>= total-de-pacientes-final total-de-pacientes-inicial)))))
