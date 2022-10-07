@@ -896,6 +896,15 @@ Modifica um gerador para que não gere coleções vazias.
     ; => (["" ""] ["" ""] ["8i" "l2"] ["f" "Q"])
 ```
 
+#### [gen/one-of]https://clojure.github.io/test.check/clojure.test.check.generators.html#var-one-of)
+
+Cria um gerador que escolhe aleatoriamente um valor da lista de geradores fornecidos.
+
+```clojure
+    (gen/sample (gen/one-of [gen/small-integer gen/boolean (gen/vector gen/small-integer)]))
+    ; => (true [] -1 [0] [1 -4 -4 1] true 4 [] 6 true)
+```
+
 ### [Prismatic/Schema Generators](https://cljdoc.org/d/prismatic/schema-generators/0.1.3/api/schema-generators.generators)
 
 Schema Generators é uma biblioteca que fornece formas de geração automática de dados de teste a partir de schemas.

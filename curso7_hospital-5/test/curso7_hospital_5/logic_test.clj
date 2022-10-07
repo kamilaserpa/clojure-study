@@ -60,7 +60,7 @@
     (is (= {:espera (conj fila pessoa)}                     ; deve retornar o mesmo hospital com a pessoa na fila
            (chega-em {:espera fila} :espera pessoa)))))
 
-(def nome-aleatorio
+(def nome-aleatorio-gen
   (gen/fmap                                                 ; aplica essa função (clj.string/join) a cada um dos itens gerados
     clojure.string/join                                     ; une o vetor de letras (5 a 10) em uma string
     (gen/vector gen/char-alphanumeric 5 10)))               ; cria vetor de 5 a 10 caracteres alfanuméricos
@@ -71,7 +71,7 @@
 (def fila-nao-cheia-gen
   (gen/fmap
     transforma-vetor-em-fila
-    (gen/vector nome-aleatorio 0 4)))
+    (gen/vector nome-aleatorio-gen 0 4)))
 
 ; Para teste de propriedade (ex quantidade de pessoas no HOSPITAL continua a mesma após o transfere?)
 ; Abordagem razoável porém não agradável, pois usamos o tipo da exceptionm
@@ -101,7 +101,7 @@
 #_(defspec transfere-tem-que-manter-a-quantidade-de-pessoas 50
     (prop/for-all
       [;espera gen/char-alphanumeric ; caso de erro de schema
-       espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio 0 50)) ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
+       espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio-gen 0 50)) ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
        raio-x fila-nao-cheia-gen
        ultrassom fila-nao-cheia-gen
        vai-para (gen/vector (gen/elements [:raio-x :ultrassom]) 0 50)]
@@ -115,7 +115,7 @@
 
 (defspec transfere-tem-que-manter-a-quantidade-de-pessoas 50
   (prop/for-all
-    [espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio 0 50)) ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
+    [espera (gen/fmap transforma-vetor-em-fila (gen/vector nome-aleatorio-gen 0 50)) ; caso não haja ninguém para ser transferido (fila-vazia no espera) o transfere quebra
      raio-x fila-nao-cheia-gen
      ultrassom fila-nao-cheia-gen
      vai-para (gen/vector (gen/elements [:raio-x :ultrassom]) 0 50)]
@@ -138,7 +138,17 @@
       (gen/not-empty (g/generator h.model/Hospital))
       fila-nao-cheia-gen)))
 
+(def chega-em-gen
+  "Gerador de chegadas no hospital"
+  (gen/tuple (gen/return chega-em), (gen/return :espera), nome-aleatorio-gen))
+
+(def transfere-gen
+  "Gerador de transferências no hospital"
+  (gen/tuple (gen/return transfere), gen/keyword, gen/keyword))
+
 (defspec simula-um-dia-do-hospital-nao-perde-pessoas 10
-  (prop/for-all [hospital hospital-gen]                     ;  hospital recebe o valor do gerador
-    (pprint hospital)
+  (prop/for-all [hospital hospital-gen
+                 acoes (gen/vector
+                         (gen/one-of [chega-em-gen transfere-gen]))] ; gere um destes
+    (pprint acoes)
     (is (= 1 1))))
