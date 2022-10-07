@@ -75,6 +75,14 @@ Cria um gerador que escolhe aleatoriamente um valor da lista de geradores fornec
     ; => (true [] -1 [0] [1 -4 -4 1] true 4 [] 6 true)
 ```
 
+### [gen/return](https://clojure.github.io/test.check/clojure.test.check.generators.html#var-return)
+
+Cria um gerador que sempre retorna um valor constante, e nunca encolhe.
+```clojure
+    (gen/sample (gen/return 42))
+    ; => (42 42 42 42 42 42 42 42 42 42)
+```
+
 ### [Prismatic/Schema Generators](https://cljdoc.org/d/prismatic/schema-generators/0.1.3/api/schema-generators.generators)
 
 Schema Generators é uma biblioteca que fornece formas de geração automática de dados de teste a partir de schemas.
