@@ -145,12 +145,17 @@
              nome-aleatorio-gen
              (gen/return 1)))                               ; incremento de uma pessoa no hospital
 
+(defn adiciona-inexistente-ao-departamento [departamento]
+  (keyword (str departamento "-inexistente")))
+
 (defn transfere-gen [hospital]
-  "Gerador de transferências no hospital"
-  (let [departamentos (keys hospital)]
+  "Gerador de transferências no hospital, simula departamento que não existe, erro humano"
+  (let [departamentos (keys hospital)
+        departamentos-inexistentes (map adiciona-inexistente-ao-departamento departamentos)
+        todos-os-departamentos (concat departamentos departamentos-inexistentes)]
     (gen/tuple (gen/return transfere)
-               (gen/elements departamentos)                 ; um dos elementos do hospital
-               (gen/elements departamentos)
+               (gen/elements todos-os-departamentos)        ; um dos elementos do hospital
+               (gen/elements todos-os-departamentos)
                (gen/return 0))))                            ; diferanca = 0, mesma quantidade de pacientes no hospital
 
 (defn acao-gen [hospital]
@@ -168,6 +173,8 @@
         {:hospital  hospital-novo,
          :diferenca (+ diferenca-se-sucesso diferenca-atual)})
       (catch IllegalStateException _
+        situacao)
+      (catch AssertionError _                               ; caso super específico
         situacao))))
 
 (defspec simula-um-dia-do-hospital-nao-perde-pessoas 50

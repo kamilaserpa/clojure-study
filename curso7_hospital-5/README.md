@@ -143,3 +143,6 @@ Não importa quantas vezes criptografemos a senha, o resultado tem que ser o mes
 Outro bom exemplo dado pelo autor do post é o de formatação de datas, análogo ao exemplo citado da criptografia. Se utilizarmos uma data de padrão brasileiro, "18/09/1981", passarmos à formatação americana, "09/18/1981", quando retornarmos ao padrão brasileiro, a data precisa ser a mesma, caso contrário, trata-se de um bug. Trabalhamos com uma propriedade do código, e não o código em si.
 
  Seriam exemplos de propriedades da transferência de pacientes do hospital, o total de pessoas no hospital antes da transferência deve ser igual ao total de pessoas no hospital após a transferência de pessoas entre departamentos.
+
+## [Certificado](/certificados/Certificado-clojure-7-alura.pdf)
+https://cursos.alura.com.br/certificate/kamila-serpa/clojure-property-based-test
